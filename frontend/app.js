@@ -116,8 +116,16 @@
       '<div class="field"><label>Student number</label><input type="text" inputmode="numeric" id="num" placeholder="e.g. 1234567" maxlength="10"></div>' +
       '<div class="field"><label>First name</label><input type="text" id="name" placeholder="e.g. Alex" maxlength="60"></div>' +
       '<div class="actions"><button class="primary" id="signin-btn">Sign in</button></div>' +
-      '<p style="margin-top:24px;font-size:13px;color:var(--ink-soft);">Teacher? Add <code>#teacher?pin=YOUR_PIN</code> to the URL.</p>');
+      '<hr style="margin:28px 0;border:none;border-top:1px solid var(--line-soft);">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<span style="font-size:13px;color:var(--ink-soft);">Teacher?</span>' +
+        '<button id="teacher-login-btn">Teacher login</button>' +
+      '</div>');
     root.appendChild(wrap);
+    document.getElementById('teacher-login-btn').onclick = () => {
+      const pin = prompt('Enter teacher PIN:');
+      if (pin && pin.trim()) window.location.hash = '#teacher?pin=' + encodeURIComponent(pin.trim());
+    };
     document.getElementById('signin-btn').onclick = async () => {
       const number = document.getElementById('num').value.trim();
       const name = document.getElementById('name').value.trim();
@@ -217,6 +225,7 @@
   function renderQuestionCard(q, idx, colors, slots) {
     const card = document.createElement('div');
     card.className = 'q-card';
+    card.id = 'qcard-' + idx;
     const ans = state.student.answers[idx];
     const isCorrect = ans && ans.correct;
     if (isCorrect) card.classList.add('correct');
@@ -225,6 +234,13 @@
     let statusText = isCorrect
       ? ('Correct -- $' + Number(ans.value).toFixed(2) + ' (took ' + ans.attempts + ' attempt' + (ans.attempts === 1 ? '' : 's') + ')')
       : '';
+    // Restore last feedback if any (so a 10s poll doesn't wipe it).
+    const persistedFb = state.lastFeedback && state.lastFeedback[idx];
+    const fbHtml = (!isCorrect && persistedFb)
+      ? '<div class="feedback ' + (persistedFb.warn ? 'warn' : '') + '">' + escapeHtml(persistedFb.text) + '</div>'
+      : '';
+    const setupVerified = state.setupVerified && state.setupVerified[idx];
+
     let html =
       '<div class="q-header">' +
         '<div class="q-number" style="background:' + escapeHtml(colorHex) + '">' + (idx+1) + '</div>' +
@@ -235,12 +251,21 @@
       '</div>';
     if (!isCorrect) {
       html += renderTVMSetupHTML(q, idx);
+      // TVM check + calculator unlock row
       html +=
+        '<div class="setup-actions" style="display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap;">' +
+          '<button id="check-' + idx + '">Check my setup</button>' +
+          '<button id="calc-' + idx + '" class="calc-btn" ' + (setupVerified ? '' : 'disabled') + '>' +
+            (setupVerified ? 'Open course TVM Solver ↗' : 'Calculator (locked)') +
+          '</button>' +
+          '<span id="check-result-' + idx + '" style="font-size:13px;"></span>' +
+        '</div>' +
+        '<div id="check-detail-' + idx + '"></div>' +
         '<div class="answer-row">' +
           '<div class="dollar-input"><input type="number" step="0.01" inputmode="decimal" id="ans-' + idx + '" placeholder="My answer"></div>' +
-          '<button class="primary" id="submit-' + idx + '">Submit</button>' +
+          '<button class="primary" id="submit-' + idx + '">Submit answer</button>' +
         '</div>' +
-        '<div id="feedback-' + idx + '"></div>' +
+        '<div id="feedback-' + idx + '">' + fbHtml + '</div>' +
         '<div class="hint-trigger" id="hints-' + idx + '"></div>' +
         '<div id="hint-card-' + idx + '"></div>';
     }
@@ -250,9 +275,88 @@
       if (setupEl) setupEl.querySelector('.toggle').onclick = () => setupEl.classList.toggle('collapsed');
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
-      renderHintButtons(idx);
+      card.querySelector('#check-' + idx).onclick = () => checkSetup(q, idx, card);
+      card.querySelector('#calc-' + idx).onclick = () => openCalculator(idx);
+      // Bind hint buttons against the card (not document — card isn't in DOM yet).
+      renderHintButtons(idx, card);
     }
     return card;
+  }
+
+  function expectedSetup(q) {
+    const N = q.years * q.cy;
+    const isFvType = (q.type === 'FV' || q.type === 'INT_EARNED');
+    return {
+      solvingFor: isFvType ? 'FV' : 'PV',
+      N: N,
+      iy: q.rate,
+      pv: isFvType ? 0 : null,    // null = "blank/unknown" allowed
+      pmt: q.pmt,
+      fv: isFvType ? null : 0,
+      py: q.cy,
+      cy: q.cy
+    };
+  }
+
+  function approxEq(a, b) {
+    if (a == null || b == null) return false;
+    return Math.abs(Number(a) - Number(b)) < 0.01;
+  }
+
+  function validateSetup(q, setup) {
+    const exp = expectedSetup(q);
+    const errors = [];
+    if (setup.solvingFor !== exp.solvingFor) errors.push({ field: 'Solving for', got: setup.solvingFor, want: exp.solvingFor });
+    if (!approxEq(setup.N, exp.N))           errors.push({ field: 'N',           got: setup.N,           want: exp.N });
+    if (!approxEq(setup.iy, exp.iy))         errors.push({ field: 'I/Y',         got: setup.iy,          want: exp.iy });
+    if (!approxEq(setup.pmt, exp.pmt))       errors.push({ field: 'PMT',         got: setup.pmt,         want: exp.pmt });
+    if (!approxEq(setup.py, exp.py))         errors.push({ field: 'P/Y',         got: setup.py,          want: exp.py });
+    if (!approxEq(setup.cy, exp.cy))         errors.push({ field: 'C/Y',         got: setup.cy,          want: exp.cy });
+    // PV / FV: one must be 0 (the given), the other should be blank or 0 (will be solved)
+    if (exp.pv === 0 && !approxEq(setup.pv, 0)) errors.push({ field: 'PV', got: setup.pv, want: 0 });
+    if (exp.fv === 0 && !approxEq(setup.fv, 0)) errors.push({ field: 'FV', got: setup.fv, want: 0 });
+    return { ok: errors.length === 0, errors: errors };
+  }
+
+  async function checkSetup(q, idx, card) {
+    const setup = readSetup(idx);
+    const result = validateSetup(q, setup);
+    const resultEl = card.querySelector('#check-result-' + idx);
+    const detailEl = card.querySelector('#check-detail-' + idx);
+    const calcBtn = card.querySelector('#calc-' + idx);
+    if (result.ok) {
+      resultEl.textContent = '✓ Setup looks correct';
+      resultEl.style.color = 'var(--accent)';
+      setHTML(detailEl, '');
+      calcBtn.disabled = false;
+      calcBtn.textContent = 'Open course TVM Solver ↗';
+      state.setupVerified = state.setupVerified || {};
+      state.setupVerified[idx] = true;
+      // Log the verified setup for assessment evidence
+      try { await API.submitTVMSetup(state.student.number, idx, Object.assign({}, setup, { passedCheck: true })); } catch (_) {}
+    } else {
+      resultEl.textContent = '✗ Check the highlighted fields';
+      resultEl.style.color = 'var(--warn)';
+      const rows = result.errors.map(e =>
+        '<li>' + escapeHtml(e.field) + ': you have <code>' + escapeHtml(String(e.got == null ? '(blank)' : e.got)) +
+        '</code> — re-read the question carefully.</li>'
+      ).join('');
+      setHTML(detailEl, '<div class="feedback warn"><strong>Setup not quite right:</strong><ul style="margin:6px 0 0 18px;">' + rows + '</ul></div>');
+      calcBtn.disabled = true;
+      calcBtn.textContent = 'Calculator (locked)';
+      state.setupVerified = state.setupVerified || {};
+      state.setupVerified[idx] = false;
+      try { await API.submitTVMSetup(state.student.number, idx, Object.assign({}, setup, { passedCheck: false })); } catch (_) {}
+    }
+  }
+
+  function openCalculator(idx) {
+    if (!state.setupVerified || !state.setupVerified[idx]) {
+      toast('Verify your TVM setup first.', 'warn');
+      return;
+    }
+    const url = (state.config && state.config.tvmSolverUrl) || cfg.TVM_SOLVER_URL_FALLBACK;
+    window.open(url, '_blank', 'noopener');
   }
 
   function renderTVMSetupHTML(q, idx) {
@@ -300,57 +404,65 @@
     if (!isFinite(val)) { toast('Enter a number first.', 'warn'); return; }
     const fbEl = document.getElementById('feedback-' + idx);
     const statusEl = document.getElementById('qstatus-' + idx);
-    setHTML(fbEl, '');
+    state.lastFeedback = state.lastFeedback || {};
+    if (fbEl) setHTML(fbEl, '');
     if (!state.config || state.config.tvmSetupRequired !== false) {
       try { await API.submitTVMSetup(state.student.number, idx, readSetup(idx)); } catch (_) {}
     }
     inp.disabled = true;
+    state.interacting = Date.now();  // Suppress poll re-render while we're mid-submit
     try {
       const r = await API.submitAnswer(state.student.number, idx, val);
       if (!r.ok) {
-        setHTML(fbEl, '<div class="feedback warn">' + escapeHtml(r.error || 'Submit failed') + '</div>');
+        state.lastFeedback[idx] = { text: r.error || 'Submit failed', warn: true };
+        if (fbEl) setHTML(fbEl, '<div class="feedback warn">' + escapeHtml(r.error || 'Submit failed') + '</div>');
         inp.disabled = false; return;
       }
       if (r.correct) {
         state.student.answers[idx] = { value: val, correct: true, attempts: r.attemptNumber, completedAt: Date.now() };
         (r.gridCells || []).forEach(c => state.justFilled.add(c));
+        delete state.lastFeedback[idx];
         toast('Correct! +' + (r.gridCells || []).length + ' tiles');
         render();
       } else {
         const fbText = r.feedback || "Re-check your setup. Try Hint 1 if you're stuck.";
-        setHTML(fbEl, '<div class="feedback ' + (r.isClose ? '' : 'warn') + '">' + escapeHtml(fbText) + ' <span style="opacity:0.7;">(attempt ' + r.attemptNumber + ')</span></div>');
-        statusEl.className = 'q-status wrong';
-        statusEl.textContent = 'Recheck -- try again';
+        const fullText = fbText + ' (attempt ' + r.attemptNumber + ')';
+        state.lastFeedback[idx] = { text: fullText, warn: !r.isClose };
+        if (fbEl) setHTML(fbEl, '<div class="feedback ' + (r.isClose ? '' : 'warn') + '">' + escapeHtml(fullText) + '</div>');
+        if (statusEl) { statusEl.className = 'q-status wrong'; statusEl.textContent = 'Recheck -- try again'; }
         inp.disabled = false; inp.select && inp.select();
       }
     } catch (err) {
-      setHTML(fbEl, '<div class="feedback warn">Could not reach server. Your answer was saved locally and will sync.</div>');
+      state.lastFeedback[idx] = { text: 'Could not reach server. Your answer was saved locally and will sync.', warn: true };
+      if (fbEl) setHTML(fbEl, '<div class="feedback warn">Could not reach server. Your answer was saved locally and will sync.</div>');
       inp.disabled = false;
     }
   }
 
-  function renderHintButtons(idx) {
-    const wrap = document.getElementById('hints-' + idx);
+  function renderHintButtons(idx, scope) {
+    // `scope` is the question card element (which may not be in the DOM yet).
+    // Fall back to document for callers that pass nothing.
+    const root = scope || document;
+    const wrap = root.querySelector('#hints-' + idx);
     if (!wrap) return;
     const current = (state.student.hints && state.student.hints[idx]) || null;
     const level = current ? current.level : 0;
     const budget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
     const spent = state.student.hintCreditsSpent || 0;
     const left = budget - spent;
-    let html = '';
+    let html = '<span style="font-size:13px;color:var(--ink-soft);margin-right:6px;">Stuck?</span>';
     for (let L = 1; L <= 3; L++) {
       const cost = L === 1 ? 0 : (L === 2 ? 1 : 2);
       const disabled = L <= level || (cost > 0 && left < cost);
-      html += '<button id="hint-btn-' + idx + '-' + L + '" ' + (disabled ? 'disabled' : '') + '>Hint ' + L + (cost ? ' (' + cost + 'c)' : ' (free)') + '</button>';
+      html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" ' + (disabled ? 'disabled' : '') + '>Hint ' + L + (cost ? ' (' + cost + 'c)' : ' (free)') + '</button> ';
     }
     setHTML(wrap, html);
-    for (let L = 1; L <= 3; L++) {
-      const b = document.getElementById('hint-btn-' + idx + '-' + L);
-      if (b) b.onclick = () => useHint(idx, L);
-    }
-    const card = document.getElementById('hint-card-' + idx);
-    if (current && current.html && card) {
-      setHTML(card, '<div class="hint-card"><h5>Hint level ' + current.level + '</h5>' + current.html + '</div>');
+    wrap.querySelectorAll('.hint-btn').forEach(b => {
+      b.onclick = (e) => useHint(parseInt(b.getAttribute('data-idx'), 10), parseInt(b.getAttribute('data-level'), 10));
+    });
+    const hintCardEl = root.querySelector('#hint-card-' + idx);
+    if (current && current.html && hintCardEl) {
+      setHTML(hintCardEl, '<div class="hint-card"><h5>Hint level ' + current.level + '</h5>' + current.html + '</div>');
     }
   }
 
@@ -714,9 +826,18 @@
 
   async function refreshStudent() {
     if (!state.student) return;
+    // Don't disturb the UI if the student is actively typing or just submitted.
+    const active = document.activeElement && document.activeElement.tagName;
+    if (active === 'INPUT' || active === 'SELECT' || active === 'TEXTAREA') return;
+    if (state.interacting && (Date.now() - state.interacting) < 8000) return;
     try {
       const r = await API.signin(state.student.name, state.student.number);
-      if (r.ok) { state.student = r.student; state.config = r.config; renderSection(); }
+      if (!r.ok) return;
+      const oldSolved = (state.student.answers || []).filter(a => a && a.correct).length;
+      const newSolved = (r.student.answers || []).filter(a => a && a.correct).length;
+      state.student = r.student; state.config = r.config;
+      // Only re-render if something meaningful changed (e.g. teacher reset).
+      if (oldSolved !== newSolved) renderSection();
     } catch (_) {}
   }
 
