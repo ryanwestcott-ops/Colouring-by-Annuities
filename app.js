@@ -37,7 +37,7 @@
   window.addEventListener('hashchange', () => { state.route = parseRoute(); render(); });
   async function loadSheetsData() {
     if (state.sheets) return state.sheets;
-    const paths = ['../data/sheets.json', 'data/sheets.json', '/data/sheets.json'];
+    const paths = ['data/sheets.json', './data/sheets.json', '../data/sheets.json'];
     for (const p of paths) {
       try {
         const res = await fetch(p, { cache: 'no-cache' });
