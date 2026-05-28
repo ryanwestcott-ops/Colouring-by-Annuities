@@ -1,0 +1,12 @@
+{
+  "name": "annuities-mosaic",
+  "version": "1.0.0",
+  "description": "Colouring by Annuities -- Lazy Giraffe (MAP4C classroom assessment tool)",
+  "private": true,
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "build:sheets-gs": "python generate_sheets_gs.py",
+    "serve": "python -m http.server 8000 --directory frontend"
+  },
+  "license": "MIT"
+}

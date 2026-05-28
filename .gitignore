@@ -1,0 +1,12 @@
+# Local dev artefacts
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Editor
+.vscode/
+.idea/
+
+# Don't commit clasp credentials (script ID is fine, but if a refresh token lives here, never commit it)
+.clasprc.json
