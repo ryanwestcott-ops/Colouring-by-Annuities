@@ -290,6 +290,220 @@ code { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; fon
   .dashboard-mosaic { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* =========================================================================
+   Polish pass — student side. Overrides only; no DOM/class changes.
+   ========================================================================= */
+
+/* Smoother global rhythm */
+html { scroll-behavior: smooth; }
+body { font-size: 15.5px; }
+
+/* Stronger contrast on top bar's project title */
+.topbar h1 { letter-spacing: -0.01em; }
+.topbar nav a,
+.topbar nav button { transition: background 0.15s, border-color 0.15s; }
+
+/* ---- Student header ---- */
+.student-header { padding: 20px 0 16px; gap: 20px; margin-bottom: 4px; }
+.section-badge {
+  background: linear-gradient(160deg, #2a3142 0%, var(--ink) 70%);
+  font-size: 30px; width: 78px; height: 78px;
+  box-shadow: 0 8px 24px rgba(31, 37, 51, 0.25), inset 0 -2px 0 rgba(255,255,255,0.05);
+}
+.student-meta h2 { font-size: 24px; letter-spacing: -0.01em; }
+.student-meta .sub { font-size: 13.5px; margin-top: 2px; }
+.progress-bar { height: 10px; border-radius: 5px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
+.progress-bar > div { box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset; }
+.hint-chip { box-shadow: 0 2px 6px rgba(200, 158, 96, 0.18); font-size: 13.5px; }
+
+/* ---- Section dividers as chips ---- */
+.section-divider {
+  border-top: none; margin: 36px 0 12px; padding: 0;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-divider::before,
+.section-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 40%, var(--line) 60%, transparent);
+}
+.section-divider {
+  font-size: 11.5px; font-weight: 700; color: var(--ink-soft);
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+
+/* ---- Question card ---- */
+.q-card {
+  padding: 20px 20px 18px; margin-bottom: 16px; border-radius: 12px;
+  border-color: var(--line-soft);
+  box-shadow: 0 1px 2px rgba(30, 25, 10, 0.04), 0 8px 24px -8px rgba(30, 25, 10, 0.08);
+  transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s;
+  animation: q-card-enter 0.35s ease both;
+}
+@keyframes q-card-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.q-card:hover { border-color: var(--line); box-shadow: 0 1px 2px rgba(30, 25, 10, 0.04), 0 12px 32px -10px rgba(30, 25, 10, 0.12); }
+.q-card.correct {
+  background: linear-gradient(0deg, var(--accent-soft) 0%, #fafef9 60%, white 100%);
+  border-color: var(--accent);
+  box-shadow: 0 1px 2px rgba(30, 122, 60, 0.06), 0 12px 32px -10px rgba(30, 122, 60, 0.18);
+}
+.q-card.correct:hover { transform: none; }
+
+.q-header { gap: 14px; align-items: center; }
+.q-number {
+  width: 38px; height: 38px; font-size: 17px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 -2px 0 rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.18);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.18);
+}
+.q-text { font-size: 16px; line-height: 1.6; margin-bottom: 6px; color: #2a3142; }
+.q-status { font-size: 13.5px; margin-top: 4px; }
+.q-status.correct::before { content: '✓ '; }
+.q-status.wrong::before   { content: '✗ '; }
+
+/* ---- TVM setup ---- */
+.tvm-setup {
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px 16px 16px;
+  background: linear-gradient(180deg, var(--bg-soft) 0%, #fcfaf3 100%);
+  margin: 14px 0 10px;
+}
+.tvm-setup-header { margin-bottom: 10px; }
+.tvm-setup-header h4 {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.tvm-setup-header .toggle {
+  font-size: 12px; padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--line); color: var(--ink-soft);
+  background: white; transition: background 0.15s;
+}
+.tvm-setup-header .toggle:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-dark); }
+.tvm-setup > p { font-size: 12.5px !important; line-height: 1.45; }
+
+.tvm-fields { grid-template-columns: repeat(4, 1fr); gap: 10px 14px; }
+.tvm-fields .field {
+  flex-direction: column; align-items: stretch; gap: 3px;
+}
+.tvm-fields label {
+  width: auto; margin: 0; font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+}
+.tvm-fields input,
+.tvm-fields select {
+  padding: 8px 10px; font-size: 14px; font-variant-numeric: tabular-nums;
+  border-radius: 7px; background: white;
+}
+.tvm-fields input.correct,
+.tvm-fields select.correct {
+  box-shadow: 0 0 0 3px rgba(30, 122, 60, 0.12);
+}
+.tvm-fields input.wrong,
+.tvm-fields select.wrong {
+  box-shadow: 0 0 0 3px rgba(198, 61, 47, 0.12);
+}
+
+/* ---- Setup actions row (Check / Calculator) ---- */
+.setup-actions { gap: 10px !important; margin-top: 10px !important; }
+.setup-actions button {
+  font-size: 13.5px; padding: 8px 14px; border-radius: 8px; font-weight: 600;
+}
+#check-0, [id^="check-"] { border-color: var(--info); color: var(--info); background: white; }
+[id^="check-"]:hover:not(:disabled) { background: var(--info-soft); }
+[id^="calc-"] {
+  background: var(--gold); border-color: var(--gold); color: white;
+  box-shadow: 0 4px 10px rgba(200, 158, 96, 0.25);
+}
+[id^="calc-"]:hover:not(:disabled) {
+  background: #b48a4a; border-color: #b48a4a;
+}
+[id^="calc-"]:disabled {
+  background: var(--bg-soft) !important; color: var(--ink-soft) !important;
+  border-color: var(--line) !important; box-shadow: none !important;
+  opacity: 1;
+}
+[id^="check-result-"] { font-weight: 600; }
+
+/* ---- Answer row ---- */
+.answer-row { margin-top: 14px; gap: 10px; }
+.answer-row .dollar-input input {
+  padding: 12px 14px 12px 26px; font-size: 16px; font-weight: 600;
+}
+.answer-row .dollar-input::before { font-size: 16px; font-weight: 600; }
+.answer-row button.primary {
+  padding: 12px 22px; font-size: 15px;
+  box-shadow: 0 4px 12px rgba(30, 122, 60, 0.22);
+}
+.answer-row button.primary:hover { box-shadow: 0 6px 16px rgba(30, 122, 60, 0.3); transform: translateY(-1px); }
+
+/* ---- Feedback box ---- */
+.feedback {
+  margin-top: 10px; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+  border-left-width: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  animation: fb-in 0.2s ease;
+}
+@keyframes fb-in { from { opacity: 0; transform: translateY(-2px); } to { opacity: 1; transform: none; } }
+.feedback strong { color: inherit; }
+.feedback ul { margin: 6px 0 0 18px; padding: 0; }
+.feedback code { background: rgba(0,0,0,0.06); padding: 1px 5px; border-radius: 3px; }
+
+/* ---- Hint trigger + card ---- */
+.hint-trigger { margin-top: 12px; align-items: center; }
+.hint-trigger button {
+  font-size: 12.5px; padding: 5px 12px; border-radius: 999px; font-weight: 600;
+  border-color: var(--gold); color: #6b4d12; background: white;
+}
+.hint-trigger button:hover:not(:disabled) { background: var(--gold-soft); }
+.hint-trigger button:disabled { background: var(--bg-soft); color: var(--ink-soft); border-color: var(--line); }
+.hint-card { margin-top: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(200, 158, 96, 0.12); }
+.hint-card code { background: rgba(0,0,0,0.05); padding: 0 4px; border-radius: 3px; }
+
+/* ---- Mosaic ---- */
+.grid-wrap > .card { padding: 16px; border-radius: 12px; }
+.grid-wrap > .card > h3 {
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink-soft); margin-bottom: 12px;
+}
+.mosaic {
+  border-radius: 8px; border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.04);
+}
+.mosaic .cell { transition: background 0.5s ease, transform 0.2s; }
+.legend { gap: 8px 14px; margin-top: 14px; }
+.legend .item { font-size: 11.5px; }
+.legend .swatch { box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+/* ---- Complete banner ---- */
+.complete-banner {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  border-radius: 12px; padding: 20px;
+  box-shadow: 0 10px 28px -8px rgba(30, 122, 60, 0.45);
+}
+.complete-banner h2 { font-size: 20px; margin: 0 0 4px; }
+
+/* ---- Sign-in polish ---- */
+.signin-wrap.card.hero {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, white 0%, #fffdf7 100%);
+}
+.signin-wrap input { padding: 12px 14px; font-size: 15px; }
+.signin-wrap button.primary { width: 100%; padding: 14px; }
+
+/* ---- Connection banner refinement ---- */
+.conn-banner { font-weight: 500; padding: 10px 24px; }
+
+/* Narrower screens — TVM grid collapses gracefully */
+@media (max-width: 1100px) {
+  .tvm-fields { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .tvm-fields { grid-template-columns: 1fr; }
+  .section-badge { width: 60px; height: 60px; font-size: 22px; }
+  .student-header { gap: 12px; }
+  .q-text { font-size: 15px; }
+}
+
 /* ======== Print fallback ======== */
 @media print {
   body { background: white; }
