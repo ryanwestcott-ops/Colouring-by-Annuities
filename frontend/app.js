@@ -272,7 +272,10 @@
     setHTML(card, html);
     if (!isCorrect) {
       const setupEl = card.querySelector('.tvm-setup');
-      if (setupEl) setupEl.querySelector('.toggle').onclick = () => setupEl.classList.toggle('collapsed');
+      if (setupEl) {
+        setupEl.querySelector('.toggle').onclick = () => setupEl.classList.toggle('collapsed');
+        attachLiveValidation(card, q, idx);
+      }
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
       card.querySelector('#check-' + idx).onclick = () => checkSetup(q, idx, card);
@@ -362,30 +365,67 @@
   function renderTVMSetupHTML(q, idx) {
     const required = !state.config || state.config.tvmSetupRequired !== false;
     if (!required) return '';
+    // All blank by default. If student previously saved a setup (resuming after refresh),
+    // restore those values — they'll re-color via attachLiveValidation.
     const setup = (state.student.setups && state.student.setups[idx]) || {};
-    const solveFor = setup.solvingFor || (q.type === 'PV' ? 'PV' : 'FV');
-    const N = setup.N != null ? setup.N : (q.years * q.cy);
-    const iy = setup.iy != null ? setup.iy : q.rate;
-    const pv = setup.pv != null ? setup.pv : (q.type === 'PV' ? '' : 0);
-    const pmt = setup.pmt != null ? setup.pmt : q.pmt;
-    const fv = setup.fv != null ? setup.fv : ((q.type === 'FV' || q.type === 'INT_EARNED') ? '' : 0);
-    const py = setup.py != null ? setup.py : q.cy;
-    const cy2 = setup.cy != null ? setup.cy : q.cy;
-    function opt(v, label) { return '<option value="' + label + '" ' + (v === label ? 'selected' : '') + '>' + label + '</option>'; }
+    const v = (key) => (setup[key] != null && setup[key] !== '') ? setup[key] : '';
+    const sf = setup.solvingFor || '';
+    function opt(label) { return '<option value="' + label + '"' + (sf === label ? ' selected' : '') + '>' + (label || '(choose)') + '</option>'; }
     return '<div class="tvm-setup" id="setup-' + idx + '">' +
       '<div class="tvm-setup-header"><h4>My TVM setup</h4><span class="toggle">collapse</span></div>' +
+      '<p style="font-size:12px;color:var(--ink-soft);margin:0 0 8px;">Read the question and fill in every field. Fields turn green when right, red when wrong.</p>' +
       '<div class="tvm-fields">' +
         '<div class="field"><label>Solving for</label><select id="setup-solveFor-' + idx + '">' +
-          opt(solveFor, 'FV') + opt(solveFor, 'PV') + opt(solveFor, 'PMT') + opt(solveFor, 'I/Y') + opt(solveFor, 'N') +
+          opt('') + opt('FV') + opt('PV') + opt('PMT') + opt('I/Y') + opt('N') +
         '</select></div>' +
-        '<div class="field"><label>N</label><input type="number" step="any" id="setup-N-' + idx + '" value="' + N + '"></div>' +
-        '<div class="field"><label>I/Y</label><input type="number" step="any" id="setup-iy-' + idx + '" value="' + iy + '"></div>' +
-        '<div class="field"><label>PV</label><input type="number" step="any" id="setup-pv-' + idx + '" value="' + pv + '"></div>' +
-        '<div class="field"><label>PMT</label><input type="number" step="any" id="setup-pmt-' + idx + '" value="' + pmt + '"></div>' +
-        '<div class="field"><label>FV</label><input type="number" step="any" id="setup-fv-' + idx + '" value="' + fv + '"></div>' +
-        '<div class="field"><label>P/Y</label><input type="number" step="any" id="setup-py-' + idx + '" value="' + py + '"></div>' +
-        '<div class="field"><label>C/Y</label><input type="number" step="any" id="setup-cy-' + idx + '" value="' + cy2 + '"></div>' +
+        '<div class="field"><label>N</label><input type="number" step="any" id="setup-N-' + idx + '" value="' + v('N') + '"></div>' +
+        '<div class="field"><label>I/Y</label><input type="number" step="any" id="setup-iy-' + idx + '" value="' + v('iy') + '"></div>' +
+        '<div class="field"><label>PV</label><input type="number" step="any" id="setup-pv-' + idx + '" value="' + v('pv') + '"></div>' +
+        '<div class="field"><label>PMT</label><input type="number" step="any" id="setup-pmt-' + idx + '" value="' + v('pmt') + '"></div>' +
+        '<div class="field"><label>FV</label><input type="number" step="any" id="setup-fv-' + idx + '" value="' + v('fv') + '"></div>' +
+        '<div class="field"><label>P/Y</label><input type="number" step="any" id="setup-py-' + idx + '" value="' + v('py') + '"></div>' +
+        '<div class="field"><label>C/Y</label><input type="number" step="any" id="setup-cy-' + idx + '" value="' + v('cy') + '"></div>' +
       '</div></div>';
+  }
+
+  // Live per-field validation: green when correct, red when wrong, no color when blank.
+  function attachLiveValidation(card, q, idx) {
+    const exp = expectedSetup(q);
+    const fields = [
+      { id: 'setup-solveFor-' + idx, expected: exp.solvingFor, type: 'select' },
+      { id: 'setup-N-'    + idx, expected: exp.N   },
+      { id: 'setup-iy-'   + idx, expected: exp.iy  },
+      { id: 'setup-pv-'   + idx, expected: exp.pv  },
+      { id: 'setup-pmt-'  + idx, expected: exp.pmt },
+      { id: 'setup-fv-'   + idx, expected: exp.fv  },
+      { id: 'setup-py-'   + idx, expected: exp.py  },
+      { id: 'setup-cy-'   + idx, expected: exp.cy  }
+    ];
+    fields.forEach(f => {
+      const el = card.querySelector('#' + f.id);
+      if (!el) return;
+      function validate() {
+        el.classList.remove('correct', 'wrong');
+        const val = el.value;
+        if (val === '' || val === null) return;  // blank = neutral
+        if (f.type === 'select') {
+          el.classList.add(val === f.expected ? 'correct' : 'wrong');
+          return;
+        }
+        const num = parseFloat(val);
+        if (f.expected === null) {
+          // "Solve for" side of the TVM equation — conventionally 0.
+          el.classList.add(num === 0 ? 'correct' : 'wrong');
+        } else if (approxEq(num, f.expected)) {
+          el.classList.add('correct');
+        } else {
+          el.classList.add('wrong');
+        }
+      }
+      el.addEventListener('input', validate);
+      el.addEventListener('change', validate);
+      validate();  // color any restored values immediately
+    });
   }
 
   function readSetup(idx) {

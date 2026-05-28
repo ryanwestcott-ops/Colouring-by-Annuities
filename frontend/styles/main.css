@@ -184,7 +184,13 @@ code { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; fon
 }
 .tvm-fields .field { display: flex; align-items: center; gap: 6px; }
 .tvm-fields label { margin: 0; width: 56px; flex-shrink: 0; }
-.tvm-fields input, .tvm-fields select { padding: 6px 8px; font-size: 14px; }
+.tvm-fields input, .tvm-fields select { padding: 6px 8px; font-size: 14px; transition: background 0.15s, border-color 0.15s; }
+.tvm-fields input.correct, .tvm-fields select.correct {
+  border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark);
+}
+.tvm-fields input.wrong, .tvm-fields select.wrong {
+  border-color: var(--warn); background: var(--warn-soft); color: var(--warn);
+}
 
 .answer-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
 .answer-row .dollar-input {
