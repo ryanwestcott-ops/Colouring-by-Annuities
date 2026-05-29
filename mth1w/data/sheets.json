@@ -1,0 +1,5195 @@
+{
+  "version": "1.0",
+  "activity": "mth1w",
+  "title": "MTH1W \u2014 Financial Literacy + Data Management Mosaic",
+  "tolerance": 0.5,
+  "hintBudget": 5,
+  "colors": {
+    "black": {
+      "hex": "#1a1a1a",
+      "label": "Black",
+      "range": [
+        500,
+        1857
+      ]
+    },
+    "yellow": {
+      "hex": "#f4d03f",
+      "label": "Yellow",
+      "range": [
+        1857,
+        3214
+      ]
+    },
+    "brown": {
+      "hex": "#7d4f2a",
+      "label": "Brown",
+      "range": [
+        3214,
+        4571
+      ]
+    },
+    "skyblue": {
+      "hex": "#5bc0eb",
+      "label": "Sky Blue",
+      "range": [
+        4571,
+        5928
+      ]
+    },
+    "green": {
+      "hex": "#1e7a3c",
+      "label": "Green",
+      "range": [
+        5928,
+        7285
+      ]
+    },
+    "white": {
+      "hex": "#ffffff",
+      "label": "White",
+      "range": [
+        7285,
+        8642
+      ]
+    },
+    "yellowgreen": {
+      "hex": "#a8d65c",
+      "label": "Yellow Green",
+      "range": [
+        8642,
+        9999
+      ]
+    }
+  },
+  "questionColorSlots": [
+    "black",
+    "yellow",
+    "brown",
+    "skyblue",
+    "green",
+    "white",
+    "yellowgreen",
+    "black",
+    "yellow",
+    "brown",
+    "skyblue",
+    "green"
+  ],
+  "layout": [
+    [
+      "A1",
+      "B1",
+      "C1",
+      "D1"
+    ],
+    [
+      "A2",
+      "B2",
+      "C2",
+      "D2"
+    ],
+    [
+      "A3",
+      "B3",
+      "C3",
+      "D3"
+    ],
+    [
+      "A4",
+      "B4",
+      "C4",
+      "D4"
+    ]
+  ],
+  "sheets": {
+    "A1": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Noah invests $3,000 at an annual simple interest rate of 4.5% for 8 years. How much **interest** will they earn?",
+          "answer": 1080.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 6 years of simple interest at 5.5%/year, Noah's account has earned $264.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Cameron invests $2,000 at 5%/year, compounded **annually**, for 6 years. What is the total amount in the account at the end?",
+          "answer": 2680.19,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Dakota deposits $2,500 at 6%/year, compounded **quarterly**, for 6 years. How much will the account be worth at the end?",
+          "answer": 3573.76,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Dakota bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 15 years?",
+          "answer": 831571.27,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Cameron bought a new car for $45,000. It depreciates at 18% per year (compounded annually). What is the car worth after 2 years?",
+          "answer": 30258.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Quinn earns $3,200 per month after tax. Their monthly expenses are: rent $938, food $326, transportation $321, other $397. How much can Quinn put into **savings** each month?",
+          "answer": 1218.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Elena earns $3,000 per month and spends $1058 on rent. What **percent** of Elena's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 35.27,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Ryan takes out a $15,000 car loan at 5% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 658.07,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 5, 5, 12, 14, 16, 19, 21. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 13.14,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 2, 21, 27, 34, 44, 48. What is the **range** of this data?",
+          "answer": 46.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 2.5x + 5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 30.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        5,
+        5,
+        5,
+        5,
+        7,
+        0,
+        7,
+        0,
+        7,
+        10,
+        3,
+        10,
+        0,
+        7,
+        0,
+        1,
+        8,
+        1,
+        7,
+        10,
+        3,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        10,
+        0,
+        1,
+        8,
+        1,
+        7,
+        0,
+        7,
+        9,
+        2,
+        3,
+        7,
+        0,
+        7,
+        0,
+        2,
+        9,
+        2,
+        9,
+        2
+      ]
+    },
+    "B1": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Sophia invests $2,000 at an annual simple interest rate of 4.5% for 7 years. How much **interest** will they earn?",
+          "answer": 630.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 3.5%/year, Ryan's account has earned $196.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Ben invests $800 at 3%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 900.41,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Priya deposits $2,500 at 3%/year, compounded **semi-annually**, for 6 years. How much will the account be worth at the end?",
+          "answer": 2989.05,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Christian bought a home for $250,000. Real estate in the area is appreciating at 4.5% per year (compounded annually). What will the home be worth after 3 years?",
+          "answer": 285291.53,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Finn bought a new car for $28,000. It depreciates at 8% per year (compounded annually). What is the car worth after 6 years?",
+          "answer": 16977.94,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Noah earns $2,500 per month after tax. Their monthly expenses are: rent $720, food $370, transportation $202, other $273. How much can Noah put into **savings** each month?",
+          "answer": 935.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Sophia earns $4,500 per month and spends $417 on entertainment. What **percent** of Sophia's monthly income goes to entertainment? (Round to 2 decimal places.)",
+          "answer": 9.27,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Aiden takes out a $30,000 car loan at 4% per year (compounded monthly) over 3 years. What is their **monthly payment**?",
+          "answer": 885.72,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 14, 18, 18, 24, 30. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 20.8,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 9, 23, 25, 26, 33, 44. What is the **range** of this data?",
+          "answer": 35.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 5x + -5**. Predict the fuel used (L) when kilometres driven = 15.",
+          "answer": 70.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        5,
+        5,
+        10,
+        3,
+        7,
+        0,
+        7,
+        0,
+        7,
+        5,
+        5,
+        5,
+        10,
+        3,
+        7,
+        8,
+        1,
+        8,
+        0,
+        7,
+        0,
+        7,
+        10,
+        3,
+        7,
+        0,
+        1,
+        7,
+        0,
+        7,
+        8,
+        1,
+        3,
+        10,
+        3,
+        7,
+        8,
+        0,
+        3,
+        7,
+        0,
+        1,
+        3,
+        10,
+        3,
+        7,
+        8,
+        0,
+        3,
+        10,
+        0,
+        1,
+        7,
+        10,
+        3,
+        7,
+        8,
+        1,
+        7,
+        10,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        8,
+        1,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        9,
+        2,
+        8,
+        1,
+        7,
+        0,
+        1,
+        7,
+        0,
+        2,
+        9,
+        2,
+        9,
+        0,
+        1,
+        8,
+        1
+      ]
+    },
+    "C1": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $1,000 at an annual simple interest rate of 3% for 6 years. How much **interest** will they earn?",
+          "answer": 180.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 3 years of simple interest at 3.5%/year, Jacob's account has earned $126.00 in interest. What was the original **principal** invested?",
+          "answer": 1200.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Cameron invests $3,000 at 4.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 3577.56,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Felix deposits $1,000 at 3.5%/year, compounded **semi-annually**, for 5 years. How much will the account be worth at the end?",
+          "answer": 1189.44,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Christian bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 3 years?",
+          "answer": 463050.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Wei bought a new car for $22,000. It depreciates at 12% per year (compounded annually). What is the car worth after 8 years?",
+          "answer": 7911.96,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Xavier earns $2,200 per month after tax. Their monthly expenses are: rent $729, food $297, transportation $198, other $300. How much can Xavier put into **savings** each month?",
+          "answer": 676.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Kendra earns $3,500 per month and spends $1059 on rent. What **percent** of Kendra's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 30.26,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Emma takes out a $10,000 car loan at 5% per year (compounded monthly) over 5 years. What is their **monthly payment**?",
+          "answer": 188.71,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 15.67,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
+          "answer": 33.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 10.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        0,
+        7,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        1,
+        7,
+        5,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        0,
+        7,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        7,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        0,
+        7,
+        10,
+        3,
+        10,
+        3,
+        10,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        10,
+        0,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        0,
+        1,
+        8,
+        0,
+        2,
+        8,
+        1,
+        8,
+        1,
+        7,
+        8,
+        0,
+        7,
+        9,
+        1
+      ]
+    },
+    "D1": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $600 at an annual simple interest rate of 2.5% for 1 year. How much **interest** will they earn?",
+          "answer": 15.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 4 years of simple interest at 4.5%/year, Ben's account has earned $270.00 in interest. What was the original **principal** invested?",
+          "answer": 1500.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Uma invests $1,000 at 2.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 1103.81,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Olivia deposits $2,500 at 3%/year, compounded **semi-annually**, for 2 years. How much will the account be worth at the end?",
+          "answer": 2653.41,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Zoe bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 7 years?",
+          "answer": 562840.17,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Grace bought a new car for $40,000. It depreciates at 15% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 24565.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Ben earns $2,500 per month after tax. Their monthly expenses are: rent $766, food $301, transportation $290, other $364. How much can Ben put into **savings** each month?",
+          "answer": 779.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 35.23,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 126.99,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.6,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
+          "answer": 28.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 3x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        3,
+        10,
+        3,
+        10,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        5,
+        10,
+        3,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        10,
+        3,
+        5,
+        5,
+        5,
+        10,
+        3,
+        5,
+        5,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        5,
+        5,
+        10,
+        3,
+        7,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        1,
+        7,
+        0,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        3,
+        9,
+        0,
+        3,
+        10,
+        3,
+        10,
+        3,
+        10,
+        6,
+        11,
+        0,
+        3,
+        10,
+        3,
+        6,
+        6,
+        11,
+        6,
+        11,
+        4
+      ]
+    },
+    "A2": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Sophia invests $2,000 at an annual simple interest rate of 4.5% for 7 years. How much **interest** will they earn?",
+          "answer": 630.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 3.5%/year, Ryan's account has earned $196.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Ben invests $800 at 3%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 900.41,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Priya deposits $2,500 at 3%/year, compounded **semi-annually**, for 6 years. How much will the account be worth at the end?",
+          "answer": 2989.05,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Christian bought a home for $250,000. Real estate in the area is appreciating at 4.5% per year (compounded annually). What will the home be worth after 3 years?",
+          "answer": 285291.53,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Finn bought a new car for $28,000. It depreciates at 8% per year (compounded annually). What is the car worth after 6 years?",
+          "answer": 16977.94,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Noah earns $2,500 per month after tax. Their monthly expenses are: rent $720, food $370, transportation $202, other $273. How much can Noah put into **savings** each month?",
+          "answer": 935.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Sophia earns $4,500 per month and spends $417 on entertainment. What **percent** of Sophia's monthly income goes to entertainment? (Round to 2 decimal places.)",
+          "answer": 9.27,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Aiden takes out a $30,000 car loan at 4% per year (compounded monthly) over 3 years. What is their **monthly payment**?",
+          "answer": 885.72,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 14, 18, 18, 24, 30. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 20.8,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 9, 23, 25, 26, 33, 44. What is the **range** of this data?",
+          "answer": 35.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 5x + -5**. Predict the fuel used (L) when kilometres driven = 15.",
+          "answer": 70.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        3,
+        10,
+        3,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        3,
+        10,
+        3,
+        10,
+        0,
+        7,
+        8,
+        1,
+        7,
+        0,
+        3,
+        10,
+        6,
+        6,
+        10,
+        3,
+        7,
+        0,
+        3,
+        7,
+        11,
+        6,
+        6,
+        11,
+        4,
+        10,
+        3,
+        10,
+        3,
+        7,
+        11,
+        4,
+        11,
+        4,
+        11,
+        6,
+        11,
+        3,
+        7,
+        9,
+        6,
+        11,
+        6,
+        11,
+        4,
+        11,
+        3,
+        10,
+        0,
+        2,
+        4,
+        11,
+        4,
+        11,
+        6,
+        11,
+        3,
+        7,
+        0,
+        2,
+        9,
+        10,
+        2,
+        9,
+        10,
+        3,
+        10,
+        0,
+        7,
+        8,
+        9,
+        2,
+        9,
+        10,
+        3,
+        10,
+        3,
+        7,
+        0,
+        1,
+        2,
+        9,
+        2,
+        3,
+        10,
+        3,
+        10,
+        0,
+        2,
+        7
+      ]
+    },
+    "B2": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $1,000 at an annual simple interest rate of 3% for 6 years. How much **interest** will they earn?",
+          "answer": 180.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 3 years of simple interest at 3.5%/year, Jacob's account has earned $126.00 in interest. What was the original **principal** invested?",
+          "answer": 1200.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Cameron invests $3,000 at 4.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 3577.56,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Felix deposits $1,000 at 3.5%/year, compounded **semi-annually**, for 5 years. How much will the account be worth at the end?",
+          "answer": 1189.44,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Christian bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 3 years?",
+          "answer": 463050.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Wei bought a new car for $22,000. It depreciates at 12% per year (compounded annually). What is the car worth after 8 years?",
+          "answer": 7911.96,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Xavier earns $2,200 per month after tax. Their monthly expenses are: rent $729, food $297, transportation $198, other $300. How much can Xavier put into **savings** each month?",
+          "answer": 676.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Kendra earns $3,500 per month and spends $1059 on rent. What **percent** of Kendra's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 30.26,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Emma takes out a $10,000 car loan at 5% per year (compounded monthly) over 5 years. What is their **monthly payment**?",
+          "answer": 188.71,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 15.67,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
+          "answer": 33.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 10.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        0,
+        7,
+        9,
+        2,
+        9,
+        0,
+        7,
+        8,
+        1,
+        8,
+        0,
+        1,
+        8,
+        1,
+        2,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        1,
+        7,
+        0,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        0,
+        5,
+        7,
+        9,
+        2,
+        9,
+        0,
+        7,
+        0,
+        5,
+        5,
+        5,
+        7,
+        9,
+        2,
+        9,
+        1,
+        8,
+        1,
+        7,
+        5,
+        5,
+        5,
+        9,
+        2,
+        9,
+        1,
+        8,
+        1,
+        8,
+        0,
+        5,
+        5,
+        9,
+        2,
+        8,
+        1,
+        7,
+        8,
+        1,
+        8,
+        0,
+        7,
+        8,
+        1,
+        8,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1
+      ]
+    },
+    "C2": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $600 at an annual simple interest rate of 2.5% for 1 year. How much **interest** will they earn?",
+          "answer": 15.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 4 years of simple interest at 4.5%/year, Ben's account has earned $270.00 in interest. What was the original **principal** invested?",
+          "answer": 1500.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Uma invests $1,000 at 2.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 1103.81,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Olivia deposits $2,500 at 3%/year, compounded **semi-annually**, for 2 years. How much will the account be worth at the end?",
+          "answer": 2653.41,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Zoe bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 7 years?",
+          "answer": 562840.17,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Grace bought a new car for $40,000. It depreciates at 15% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 24565.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Ben earns $2,500 per month after tax. Their monthly expenses are: rent $766, food $301, transportation $290, other $364. How much can Ben put into **savings** each month?",
+          "answer": 779.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 35.23,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 126.99,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.6,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
+          "answer": 28.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 3x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        1,
+        8,
+        1,
+        8,
+        0,
+        1,
+        7,
+        0,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        0,
+        1,
+        8,
+        1,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        1,
+        8,
+        0,
+        7,
+        9,
+        2,
+        7,
+        5,
+        7,
+        0,
+        7,
+        0,
+        2,
+        9,
+        0,
+        7,
+        0,
+        5,
+        7,
+        0,
+        5,
+        7,
+        0,
+        7,
+        5,
+        5,
+        5,
+        7,
+        0,
+        7,
+        0,
+        5,
+        5,
+        5,
+        5,
+        5,
+        7,
+        0,
+        1,
+        8,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        2,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        9,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8
+      ]
+    },
+    "D2": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Olivia invests $450 at an annual simple interest rate of 1.5% for 7 years. How much **interest** will they earn?",
+          "answer": 47.25,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 5.5%/year, Victor's account has earned $308.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Emma invests $800 at 2%/year, compounded **annually**, for 7 years. What is the total amount in the account at the end?",
+          "answer": 918.95,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Sophia deposits $800 at 3%/year, compounded **semi-annually**, for 6 years. How much will the account be worth at the end?",
+          "answer": 956.49,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Ryan bought a home for $100,000. Real estate in the area is appreciating at 3.5% per year (compounded annually). What will the home be worth after 15 years?",
+          "answer": 167534.88,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Dakota bought a new car for $45,000. It depreciates at 20% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 23040.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Felix earns $3,800 per month after tax. Their monthly expenses are: rent $1160, food $561, transportation $254, other $647. How much can Felix put into **savings** each month?",
+          "answer": 1178.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 34.2,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 336.2,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 17.57,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
+          "answer": 35.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        0,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        8,
+        0,
+        4,
+        11,
+        6,
+        6,
+        11,
+        4,
+        6,
+        11,
+        0,
+        1,
+        7,
+        11,
+        4,
+        11,
+        4,
+        9,
+        11,
+        4,
+        7,
+        0,
+        7,
+        0,
+        7,
+        11,
+        4,
+        9,
+        10,
+        3,
+        5,
+        7,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10,
+        5,
+        7,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10,
+        0,
+        3,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10,
+        0,
+        3,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10,
+        0,
+        7,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10,
+        2,
+        7,
+        10,
+        3,
+        10,
+        3,
+        9,
+        2,
+        3,
+        10
+      ]
+    },
+    "A3": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $1,000 at an annual simple interest rate of 3% for 6 years. How much **interest** will they earn?",
+          "answer": 180.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 3 years of simple interest at 3.5%/year, Jacob's account has earned $126.00 in interest. What was the original **principal** invested?",
+          "answer": 1200.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Cameron invests $3,000 at 4.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 3577.56,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Felix deposits $1,000 at 3.5%/year, compounded **semi-annually**, for 5 years. How much will the account be worth at the end?",
+          "answer": 1189.44,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Christian bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 3 years?",
+          "answer": 463050.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Wei bought a new car for $22,000. It depreciates at 12% per year (compounded annually). What is the car worth after 8 years?",
+          "answer": 7911.96,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Xavier earns $2,200 per month after tax. Their monthly expenses are: rent $729, food $297, transportation $198, other $300. How much can Xavier put into **savings** each month?",
+          "answer": 676.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Kendra earns $3,500 per month and spends $1059 on rent. What **percent** of Kendra's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 30.26,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Emma takes out a $10,000 car loan at 5% per year (compounded monthly) over 5 years. What is their **monthly payment**?",
+          "answer": 188.71,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 15.67,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
+          "answer": 33.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 10.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        2,
+        9,
+        10,
+        3,
+        10,
+        6,
+        10,
+        0,
+        2,
+        7,
+        9,
+        2,
+        4,
+        6,
+        6,
+        6,
+        6,
+        7,
+        9,
+        2,
+        9,
+        2,
+        4,
+        11,
+        4,
+        11,
+        4,
+        7,
+        0,
+        2,
+        9,
+        2,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        0,
+        2,
+        9,
+        2,
+        4,
+        6,
+        6,
+        6,
+        11,
+        4,
+        7,
+        0,
+        2,
+        9,
+        11,
+        6,
+        11,
+        6,
+        11,
+        4,
+        7,
+        0,
+        2,
+        9,
+        2,
+        4,
+        11,
+        4,
+        11,
+        6,
+        6,
+        7,
+        9,
+        2,
+        9,
+        11,
+        4,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        2,
+        9,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        6,
+        6,
+        11
+      ]
+    },
+    "B3": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $600 at an annual simple interest rate of 2.5% for 1 year. How much **interest** will they earn?",
+          "answer": 15.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 4 years of simple interest at 4.5%/year, Ben's account has earned $270.00 in interest. What was the original **principal** invested?",
+          "answer": 1500.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Uma invests $1,000 at 2.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 1103.81,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Olivia deposits $2,500 at 3%/year, compounded **semi-annually**, for 2 years. How much will the account be worth at the end?",
+          "answer": 2653.41,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Zoe bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 7 years?",
+          "answer": 562840.17,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Grace bought a new car for $40,000. It depreciates at 15% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 24565.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Ben earns $2,500 per month after tax. Their monthly expenses are: rent $766, food $301, transportation $290, other $364. How much can Ben put into **savings** each month?",
+          "answer": 779.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 35.23,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 126.99,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.6,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
+          "answer": 28.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 3x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        0,
+        1,
+        7,
+        8,
+        1,
+        8,
+        9,
+        2,
+        9,
+        1,
+        7,
+        8,
+        1,
+        7,
+        8,
+        1,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        8,
+        0,
+        7,
+        8,
+        9,
+        2,
+        9,
+        2,
+        9,
+        0,
+        1,
+        8,
+        0,
+        7,
+        0,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        8,
+        1,
+        8,
+        1,
+        7,
+        0,
+        7,
+        9,
+        2,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        9,
+        2,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        7,
+        0,
+        1,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        7,
+        0,
+        1,
+        8,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        1,
+        8,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8
+      ]
+    },
+    "C3": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Olivia invests $450 at an annual simple interest rate of 1.5% for 7 years. How much **interest** will they earn?",
+          "answer": 47.25,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 5.5%/year, Victor's account has earned $308.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Emma invests $800 at 2%/year, compounded **annually**, for 7 years. What is the total amount in the account at the end?",
+          "answer": 918.95,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Sophia deposits $800 at 3%/year, compounded **semi-annually**, for 6 years. How much will the account be worth at the end?",
+          "answer": 956.49,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Ryan bought a home for $100,000. Real estate in the area is appreciating at 3.5% per year (compounded annually). What will the home be worth after 15 years?",
+          "answer": 167534.88,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Dakota bought a new car for $45,000. It depreciates at 20% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 23040.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Felix earns $3,800 per month after tax. Their monthly expenses are: rent $1160, food $561, transportation $254, other $647. How much can Felix put into **savings** each month?",
+          "answer": 1178.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 34.2,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 336.2,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 17.57,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
+          "answer": 35.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        9,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        2,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        7,
+        0,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        7,
+        8,
+        1,
+        8,
+        1,
+        8,
+        1,
+        8,
+        0,
+        2,
+        7,
+        0,
+        1,
+        2,
+        8,
+        1,
+        8,
+        1,
+        7,
+        9,
+        0,
+        7,
+        0,
+        2,
+        8,
+        1,
+        8,
+        1,
+        7,
+        9,
+        0,
+        4,
+        7,
+        9,
+        2,
+        8,
+        1,
+        7,
+        9,
+        2,
+        7,
+        11,
+        0,
+        7,
+        9,
+        1,
+        8,
+        0,
+        2,
+        9
+      ]
+    },
+    "D3": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Zoe invests $500 at an annual simple interest rate of 5% for 4 years. How much **interest** will they earn?",
+          "answer": 100.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 2 years of simple interest at 3.5%/year, Maya's account has earned $210.00 in interest. What was the original **principal** invested?",
+          "answer": 3000.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Yara invests $500 at 4%/year, compounded **annually**, for 8 years. What is the total amount in the account at the end?",
+          "answer": 684.28,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Yara deposits $1,000 at 4.5%/year, compounded **quarterly**, for 4 years. How much will the account be worth at the end?",
+          "answer": 1196.01,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Uma bought a home for $300,000. Real estate in the area is appreciating at 4.5% per year (compounded annually). What will the home be worth after 5 years?",
+          "answer": 373854.58,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Ben bought a new car for $28,000. It depreciates at 15% per year (compounded annually). What is the car worth after 5 years?",
+          "answer": 12423.75,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Elena earns $2,200 per month after tax. Their monthly expenses are: rent $632, food $310, transportation $177, other $308. How much can Elena put into **savings** each month?",
+          "answer": 773.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,200 per month and spends $416 on food. What **percent** of Priya's monthly income goes to food? (Round to 2 decimal places.)",
+          "answer": 13.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Ryan takes out a $18,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 781.65,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 7, 7, 15, 19, 21. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 13.8,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 6, 6, 14, 22, 24, 41, 45, 48. What is the **range** of this data?",
+          "answer": 42.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + 20**. Predict the books read when days into the school year = 10.",
+          "answer": 45.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        1,
+        2,
+        7,
+        10,
+        3,
+        9,
+        2,
+        9,
+        2,
+        3,
+        8,
+        0,
+        7,
+        0,
+        7,
+        11,
+        4,
+        11,
+        4,
+        11,
+        0,
+        7,
+        9,
+        2,
+        7,
+        0,
+        4,
+        6,
+        6,
+        11,
+        0,
+        2,
+        9,
+        2,
+        9,
+        2,
+        7,
+        11,
+        4,
+        11,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        9,
+        0,
+        4,
+        11,
+        0,
+        7,
+        9,
+        2,
+        7,
+        8,
+        9,
+        0,
+        6,
+        11,
+        0,
+        2,
+        7,
+        9,
+        0,
+        7,
+        0,
+        2,
+        7,
+        11,
+        0,
+        2,
+        8,
+        0,
+        2,
+        7,
+        0,
+        2,
+        7,
+        11,
+        0,
+        2,
+        8,
+        0,
+        2,
+        9,
+        2,
+        7,
+        0,
+        4,
+        7,
+        0,
+        7,
+        0,
+        2,
+        9,
+        1,
+        7,
+        11,
+        6
+      ]
+    },
+    "A4": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Finn invests $600 at an annual simple interest rate of 2.5% for 1 year. How much **interest** will they earn?",
+          "answer": 15.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 4 years of simple interest at 4.5%/year, Ben's account has earned $270.00 in interest. What was the original **principal** invested?",
+          "answer": 1500.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Uma invests $1,000 at 2.5%/year, compounded **annually**, for 4 years. What is the total amount in the account at the end?",
+          "answer": 1103.81,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Olivia deposits $2,500 at 3%/year, compounded **semi-annually**, for 2 years. How much will the account be worth at the end?",
+          "answer": 2653.41,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Zoe bought a home for $400,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 7 years?",
+          "answer": 562840.17,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Grace bought a new car for $40,000. It depreciates at 15% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 24565.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Ben earns $2,500 per month after tax. Their monthly expenses are: rent $766, food $301, transportation $290, other $364. How much can Ben put into **savings** each month?",
+          "answer": 779.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 35.23,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 126.99,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.6,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
+          "answer": 28.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 3x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        4,
+        6,
+        6,
+        6,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        6,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        4,
+        11,
+        4,
+        6,
+        6,
+        11,
+        6,
+        11,
+        6,
+        6,
+        11,
+        4,
+        11,
+        4,
+        6,
+        11,
+        4,
+        11,
+        4,
+        6,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        6,
+        6,
+        6,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        6,
+        11,
+        4,
+        11,
+        4,
+        6,
+        6,
+        11,
+        4,
+        11,
+        4,
+        6,
+        11
+      ]
+    },
+    "B4": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Olivia invests $450 at an annual simple interest rate of 1.5% for 7 years. How much **interest** will they earn?",
+          "answer": 47.25,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 5.5%/year, Victor's account has earned $308.00 in interest. What was the original **principal** invested?",
+          "answer": 800.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Emma invests $800 at 2%/year, compounded **annually**, for 7 years. What is the total amount in the account at the end?",
+          "answer": 918.95,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Sophia deposits $800 at 3%/year, compounded **semi-annually**, for 6 years. How much will the account be worth at the end?",
+          "answer": 956.49,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Ryan bought a home for $100,000. Real estate in the area is appreciating at 3.5% per year (compounded annually). What will the home be worth after 15 years?",
+          "answer": 167534.88,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Dakota bought a new car for $45,000. It depreciates at 20% per year (compounded annually). What is the car worth after 3 years?",
+          "answer": 23040.0,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Felix earns $3,800 per month after tax. Their monthly expenses are: rent $1160, food $561, transportation $254, other $647. How much can Felix put into **savings** each month?",
+          "answer": 1178.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
+          "answer": 34.2,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 336.2,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 17.57,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
+          "answer": 35.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
+          "answer": 25.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        0,
+        1,
+        8,
+        0,
+        2,
+        9,
+        2,
+        8,
+        1,
+        8,
+        0,
+        7,
+        8,
+        0,
+        2,
+        9,
+        2,
+        8,
+        9,
+        2,
+        4,
+        7,
+        8,
+        0,
+        2,
+        9,
+        2,
+        8,
+        9,
+        2,
+        4,
+        7,
+        8,
+        1,
+        7,
+        9,
+        2,
+        8,
+        9,
+        2,
+        4,
+        7,
+        9,
+        1,
+        7,
+        9,
+        2,
+        8,
+        1,
+        2,
+        4,
+        7,
+        9,
+        2,
+        7,
+        9,
+        2,
+        8,
+        1,
+        2,
+        6,
+        7,
+        9,
+        2,
+        7,
+        0,
+        2,
+        8,
+        1,
+        2,
+        4,
+        7,
+        9,
+        2,
+        9,
+        0,
+        1,
+        8,
+        1,
+        8,
+        11,
+        0,
+        2,
+        9,
+        2,
+        7,
+        8,
+        1,
+        8,
+        1,
+        4,
+        7,
+        9,
+        2,
+        9,
+        0,
+        2,
+        9,
+        2,
+        8
+      ]
+    },
+    "C4": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Zoe invests $500 at an annual simple interest rate of 5% for 4 years. How much **interest** will they earn?",
+          "answer": 100.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 2 years of simple interest at 3.5%/year, Maya's account has earned $210.00 in interest. What was the original **principal** invested?",
+          "answer": 3000.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Yara invests $500 at 4%/year, compounded **annually**, for 8 years. What is the total amount in the account at the end?",
+          "answer": 684.28,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Yara deposits $1,000 at 4.5%/year, compounded **quarterly**, for 4 years. How much will the account be worth at the end?",
+          "answer": 1196.01,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Uma bought a home for $300,000. Real estate in the area is appreciating at 4.5% per year (compounded annually). What will the home be worth after 5 years?",
+          "answer": 373854.58,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Ben bought a new car for $28,000. It depreciates at 15% per year (compounded annually). What is the car worth after 5 years?",
+          "answer": 12423.75,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Elena earns $2,200 per month after tax. Their monthly expenses are: rent $632, food $310, transportation $177, other $308. How much can Elena put into **savings** each month?",
+          "answer": 773.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Priya earns $3,200 per month and spends $416 on food. What **percent** of Priya's monthly income goes to food? (Round to 2 decimal places.)",
+          "answer": 13.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Ryan takes out a $18,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 781.65,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 7, 7, 15, 19, 21. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 13.8,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 6, 6, 14, 22, 24, 41, 45, 48. What is the **range** of this data?",
+          "answer": 42.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + 20**. Predict the books read when days into the school year = 10.",
+          "answer": 45.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        0,
+        4,
+        11,
+        0,
+        2,
+        8,
+        1,
+        7,
+        9,
+        2,
+        7,
+        6,
+        11,
+        0,
+        7,
+        8,
+        0,
+        7,
+        9,
+        2,
+        7,
+        6,
+        11,
+        4,
+        7,
+        0,
+        7,
+        9,
+        2,
+        9,
+        0,
+        4,
+        6,
+        6,
+        11,
+        0,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        11,
+        4,
+        11,
+        0,
+        7,
+        0,
+        7,
+        0,
+        2,
+        7,
+        11,
+        4,
+        11,
+        4,
+        7,
+        9,
+        2,
+        9,
+        2,
+        7,
+        11,
+        6,
+        11,
+        4,
+        7,
+        0,
+        2,
+        9,
+        1,
+        7,
+        11,
+        4,
+        11,
+        4,
+        11,
+        4,
+        7,
+        0,
+        1,
+        7,
+        11,
+        4,
+        6,
+        6,
+        11,
+        4,
+        11,
+        0,
+        1,
+        8,
+        0,
+        4,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11
+      ]
+    },
+    "D4": {
+      "questions": [
+        {
+          "slot": 1,
+          "type": "simple_interest_find_I",
+          "text": "Hank invests $1,500 at an annual simple interest rate of 4% for 7 years. How much **interest** will they earn?",
+          "answer": 420.0,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Did you convert the % to a decimal? r = rate/100. So 5% \u2192 0.05."
+            },
+            {
+              "pattern": "added_pp_back",
+              "feedback": "Just the **interest** is asked for \u2014 not the total. I = P \u00d7 r \u00d7 t, not P + Prt."
+            },
+            {
+              "pattern": "wrong_t_units",
+              "feedback": "Check the units of t. If the rate is per year, t should be in years."
+            }
+          ]
+        },
+        {
+          "slot": 2,
+          "type": "simple_interest_find_P",
+          "text": "After 7 years of simple interest at 4.5%/year, Liam's account has earned $945.00 in interest. What was the original **principal** invested?",
+          "answer": 3000.0,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L1",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "wrong_formula",
+              "feedback": "Rearrange I = Prt to solve for P: P = I / (r \u00d7 t)."
+            },
+            {
+              "pattern": "no_decimal_rate",
+              "feedback": "Convert % to decimal before plugging in: r = rate/100."
+            }
+          ]
+        },
+        {
+          "slot": 3,
+          "type": "compound_annual",
+          "text": "Noah invests $3,000 at 6%/year, compounded **annually**, for 3 years. What is the total amount in the account at the end?",
+          "answer": 3573.05,
+          "color": "brown",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "intro",
+          "commonErrors": [
+            {
+              "pattern": "missed_exponent",
+              "feedback": "Compound interest grows by the factor (1+r) raised to t, not multiplied by t."
+            },
+            {
+              "pattern": "n_off",
+              "feedback": "Compounded **annually** means n = 1. Formula simplifies to P(1+r)^t."
+            }
+          ]
+        },
+        {
+          "slot": 4,
+          "type": "compound_periodic",
+          "text": "Ryan deposits $3,000 at 3%/year, compounded **quarterly**, for 2 years. How much will the account be worth at the end?",
+          "answer": 3184.8,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.FL.L2",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is the number of times interest compounds per year. Monthly = 12, quarterly = 4, semi-annually = 2."
+            },
+            {
+              "pattern": "missed_exponent",
+              "feedback": "The exponent is n\u00d7t (total number of compounding periods), not just t."
+            }
+          ]
+        },
+        {
+          "slot": 5,
+          "type": "appreciation_exp",
+          "text": "Olivia bought a home for $100,000. Real estate in the area is appreciating at 5% per year (compounded annually). What will the home be worth after 10 years?",
+          "answer": 162889.46,
+          "color": "green",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "depreciation_sign",
+              "feedback": "Appreciation uses (1 + r). If you used (1 \u2212 r), you depreciated instead of appreciated."
+            },
+            {
+              "pattern": "linear_instead",
+              "feedback": "Exponential growth uses (1+r)^t. Linear growth uses V\u2080 + d\u00b7t. Check which model the question asks for."
+            }
+          ]
+        },
+        {
+          "slot": 6,
+          "type": "depreciation_exp",
+          "text": "Xavier bought a new car for $45,000. It depreciates at 12% per year (compounded annually). What is the car worth after 8 years?",
+          "answer": 16183.55,
+          "color": "white",
+          "curriculumTag": "MTH1W.FL.L3",
+          "difficulty": "core",
+          "commonErrors": [
+            {
+              "pattern": "appreciation_sign",
+              "feedback": "Depreciation uses (1 \u2212 r). If you used (1 + r), you appreciated instead."
+            }
+          ]
+        },
+        {
+          "slot": 7,
+          "type": "budgeting_savings",
+          "text": "Sophia earns $3,200 per month after tax. Their monthly expenses are: rent $1136, food $451, transportation $196, other $479. How much can Sophia put into **savings** each month?",
+          "answer": 938.0,
+          "color": "yellowgreen",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_op",
+              "feedback": "Savings = Income \u2212 total expenses. Make sure you SUBTRACT, not add."
+            }
+          ]
+        },
+        {
+          "slot": 8,
+          "type": "budgeting_percent",
+          "text": "Sophia earns $3,000 per month and spends $261 on entertainment. What **percent** of Sophia's monthly income goes to entertainment? (Round to 2 decimal places.)",
+          "answer": 8.7,
+          "color": "black",
+          "curriculumTag": "MTH1W.FL.L4",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "ratio_wrong_way",
+              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+            }
+          ]
+        },
+        {
+          "slot": 9,
+          "type": "loan_payment",
+          "text": "Emma takes out a $15,000 car loan at 5% per year (compounded monthly) over 3 years. What is their **monthly payment**?",
+          "answer": 449.56,
+          "color": "yellow",
+          "curriculumTag": "MTH1W.FL.L5",
+          "difficulty": "multistep",
+          "commonErrors": [
+            {
+              "pattern": "wrong_r",
+              "feedback": "r in the loan formula is the MONTHLY rate, not annual. r = annual/100/12."
+            },
+            {
+              "pattern": "wrong_n",
+              "feedback": "n is total number of monthly payments. n = years \u00d7 12."
+            }
+          ]
+        },
+        {
+          "slot": 10,
+          "type": "dm_mean",
+          "text": "A student records these test scores: 2, 11, 14, 16, 24, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 15.17,
+          "color": "brown",
+          "curriculumTag": "MTH1W.DM.L1",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "median_instead",
+              "feedback": "The question asks for the MEAN (average). Median is the middle value."
+            },
+            {
+              "pattern": "missed_division",
+              "feedback": "Mean = sum of values \u00f7 count of values."
+            }
+          ]
+        },
+        {
+          "slot": 11,
+          "type": "dm_range",
+          "text": "The data set is: 3, 3, 20, 25, 36, 47, 47, 50. What is the **range** of this data?",
+          "answer": 47.0,
+          "color": "skyblue",
+          "curriculumTag": "MTH1W.DM.L2",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "iqr_instead",
+              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+            }
+          ]
+        },
+        {
+          "slot": 12,
+          "type": "dm_prediction",
+          "text": "A scatter plot of hours studied per week (x) vs test score (y) has line of best fit **y = 1.5x + -5**. Predict the test score when hours studied per week = 8.",
+          "answer": 7.0,
+          "color": "green",
+          "curriculumTag": "MTH1W.DM.L3",
+          "difficulty": "challenge",
+          "commonErrors": [
+            {
+              "pattern": "no_substitute",
+              "feedback": "Plug the x value into the equation y = mx + b. Multiply m \u00d7 x first, then add b."
+            }
+          ]
+        }
+      ],
+      "grid": [
+        2,
+        7,
+        0,
+        7,
+        9,
+        2,
+        8,
+        0,
+        7,
+        11,
+        2,
+        9,
+        2,
+        9,
+        2,
+        9,
+        2,
+        8,
+        0,
+        4,
+        9,
+        2,
+        9,
+        2,
+        9,
+        2,
+        9,
+        1,
+        7,
+        6,
+        9,
+        2,
+        9,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        6,
+        7,
+        0,
+        2,
+        9,
+        2,
+        9,
+        0,
+        7,
+        0,
+        4,
+        9,
+        2,
+        7,
+        0,
+        7,
+        0,
+        7,
+        8,
+        0,
+        4,
+        9,
+        2,
+        9,
+        2,
+        9,
+        2,
+        9,
+        1,
+        7,
+        11,
+        2,
+        9,
+        2,
+        9,
+        2,
+        9,
+        2,
+        7,
+        0,
+        4,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        7,
+        0,
+        4,
+        6,
+        11,
+        4,
+        6,
+        11,
+        4,
+        11,
+        6,
+        6,
+        11,
+        4
+      ]
+    }
+  }
+}
