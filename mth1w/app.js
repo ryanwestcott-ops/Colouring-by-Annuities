@@ -14,6 +14,16 @@
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   }
+  // Render question text: escape HTML first, then render **bold** as <strong>.
+  function renderQuestionText(s) {
+    return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
+  // Parse a user-typed dollar amount: accept $, commas, whitespace.
+  function parseMoney(s) {
+    if (s == null) return NaN;
+    const cleaned = String(s).replace(/[\s$,]/g, '');
+    return parseFloat(cleaned);
+  }
   function toast(msg, type) {
     const t = document.createElement('div');
     t.className = 'toast' + (type ? ' ' + type : '');
@@ -191,7 +201,7 @@
         '<div class="sub">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W MAP4C &middot; 12 questionsmiddot; 12 questions</div>' +
         '<div style="margin-top:6px;display:flex;align-items:center;gap:12px;">' +
           '<div style="flex:1;">' +
-            '<div style="font-size:13px;color:var(--ink-soft);">Progress: ' + solved + '/12</div>' +
+            '<div style="font-size:13px;color:var(--ink-soft);"><span><strong>Your questions:</strong> ' + solved + ' / 12</span> &nbsp;&middot;&nbsp; <span id="class-tiles-counter"><strong>Class tiles done:</strong> 0 / 16</span></div>' +
             '<div class="progress-bar"><div style="width:' + ((solved/12)*100) + '%"></div></div>' +
           '</div>' +
           '<div class="hint-chip ' + (creditsLeft === 0 ? 'empty' : '') + '">' + creditsLeft + ' hint credits left</div>' +
@@ -244,7 +254,7 @@
       '<div class="q-header">' +
         '<div class="q-number" style="background:' + escapeHtml(colorHex) + '">' + (idx+1) + '</div>' +
         '<div class="q-body">' +
-          '<div class="q-text">' + escapeHtml(q.text) + '</div>' +
+          '<div class="q-text">' + renderQuestionText(q.text) + '</div>' +
           '<div class="q-status ' + (isCorrect ? 'correct' : '') + '" id="qstatus-' + idx + '">' + escapeHtml(statusText) + '</div>' +
         '</div>' +
       '</div>';
@@ -270,20 +280,44 @@
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
       renderHintButtons(idx, card);
+      attachAutosave(idx);
     }
     return card;
   }
 
   function renderShowYourWorkHTML(q, idx) {
+    // Restore from server setup, OR localStorage autosave (whichever is freshest).
     const setup = (state.student.setups && state.student.setups[idx]) || {};
-    const prior = setup.work || '';
+    const localKey = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
+    const local = localStorage.getItem(localKey);
+    const prior = (local && local.length > 0) ? local : (setup.work || '');
+    const tpl = 'Formula:\nSubstitute:\nSolve:\nFinal answer:';
     return '<div class="show-work" id="setup-' + idx + '">' +
-      '<label style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);">My work</label>' +
-      '<textarea id="work-' + idx + '" rows="3" placeholder="Show your formula, substitution, and arithmetic..." ' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
+        '<label style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin:0;">My work</label>' +
+        '<span style="font-size:11px;color:var(--ink-soft);" id="work-status-' + idx + '"></span>' +
+      '</div>' +
+      '<textarea id="work-' + idx + '" rows="5" placeholder="' + escapeHtml(tpl) + '" ' +
         'style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;resize:vertical;font-family:inherit;font-size:14px;">' +
         escapeHtml(prior) +
       '</textarea>' +
     '</div>';
+  }
+
+  // Attaches debounced localStorage autosave to the textarea, called after card is in DOM.
+  function attachAutosave(idx) {
+    const ta = document.getElementById('work-' + idx);
+    const status = document.getElementById('work-status-' + idx);
+    if (!ta) return;
+    const key = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
+    let t = null;
+    ta.addEventListener('input', () => {
+      if (status) status.textContent = '…';
+      clearTimeout(t);
+      t = setTimeout(() => {
+        try { localStorage.setItem(key, ta.value); if (status) status.textContent = 'saved'; } catch (_) {}
+      }, 800);
+    });
   }
 
   function expectedSetup(q) {
@@ -436,8 +470,8 @@
 
   async function submitAnswer(q, idx) {
     const inp = document.getElementById('ans-' + idx);
-    const val = parseFloat(inp.value);
-    if (!isFinite(val)) { toast('Enter a number first.', 'warn'); return; }
+    const val = parseMoney(inp.value);
+    if (!isFinite(val)) { toast('Enter a number first. ($, commas OK)', 'warn'); return; }
     const fbEl = document.getElementById('feedback-' + idx);
     const statusEl = document.getElementById('qstatus-' + idx);
     state.lastFeedback = state.lastFeedback || {};
@@ -485,11 +519,12 @@
     const budget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
     const spent = state.student.hintCreditsSpent || 0;
     const left = budget - spent;
+    const labels = ['Small hint', 'Bigger hint', 'Show formula'];
     let html = '<span style="font-size:13px;color:var(--ink-soft);margin-right:6px;">Stuck?</span>';
     for (let L = 1; L <= 3; L++) {
       const cost = L === 1 ? 0 : (L === 2 ? 1 : 2);
       const disabled = L <= level || (cost > 0 && left < cost);
-      html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" ' + (disabled ? 'disabled' : '') + '>Hint ' + L + (cost ? ' (' + cost + 'c)' : ' (free)') + '</button> ';
+      html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" ' + (disabled ? 'disabled' : '') + '>' + labels[L-1] + '</button> ';
     }
     setHTML(wrap, html);
     wrap.querySelectorAll('.hint-btn').forEach(b => {
@@ -519,10 +554,13 @@
     card.className = 'card class-mosaic-card';
     const mySection = state.student.sheetId;
     setHTML(card,
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
         '<h3 style="margin:0;">Class mosaic</h3>' +
-        '<span style="font-size:11px;color:var(--ink-soft);">Yours: <strong>' + escapeHtml(mySection) + '</strong></span>' +
-      '</div>'
+        '<span style="font-size:12px;color:var(--accent-dark);background:var(--gold-soft);padding:2px 8px;border-radius:6px;font-weight:600;">Your tile: ' + escapeHtml(mySection) + '</span>' +
+      '</div>' +
+      '<p style="margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.45;">' +
+        'Complete questions to help build the class mosaic. Your tile fills as you answer correctly. The full picture appears when every tile is done.' +
+      '</p>'
     );
     // Container for the 40x40 super-grid composed of 16 section grids
     const wrap = document.createElement('div');
@@ -584,6 +622,19 @@
         wrap.appendChild(sectionEl);
       }
     }
+    updateClassTilesCounter(cmSnap);
+  }
+
+  function updateClassTilesCounter(cmSnap) {
+    const counter = document.getElementById('class-tiles-counter');
+    if (!counter) return;
+    let done = 0;
+    Object.keys(state.sheets.sheets).forEach(sid => {
+      const released = !!(cmSnap.released && cmSnap.released[sid]);
+      const solved = (cmSnap.solved && cmSnap.solved[sid]) || [];
+      if (released || (solved.length === 12 && solved.every(Boolean))) done++;
+    });
+    setHTML(counter, '<strong>Class tiles done:</strong> ' + done + ' / 16');
   }
 
   async function refreshClassMosaic() {
@@ -593,6 +644,7 @@
         state.classMosaic = r;
         const wrap = document.getElementById('class-mosaic');
         if (wrap) drawClassMosaic(wrap, null, state.sheets.colors, state.sheets.questionColorSlots);
+        else updateClassTilesCounter(r);
       }
     } catch (_) {}
   }
