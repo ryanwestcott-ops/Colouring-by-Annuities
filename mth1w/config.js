@@ -4,7 +4,7 @@ window.APP_CONFIG = {
   ACTIVITY_KEY: 'mth1w',            // localStorage namespace
   BRAND_TITLE: 'MTH1W Mosaic',
   BRAND_SUBTITLE: 'Financial Literacy + Data Management',
-  BACKEND_URL: 'PASTE-MTH1W-GAS-WEB-APP-URL-HERE',
+  BACKEND_URL: 'https://script.google.com/macros/s/AKfycby-liNtksY7OkSFte-qwuQNmhwtmHDdfqCVlNzm7vQUcijtrhOjEhLBFVtiGlcUv3Tp3g/exec',
   POLL_STUDENT_MS: 10000,
   POLL_TEACHER_MS: 5000,
   PING_MS: 30000,
