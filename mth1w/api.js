@@ -98,6 +98,7 @@
     rosterPreload: (teacherPin, numbers, assignments) =>
                      call('rosterPreload', { teacherPin, numbers, assignments }),
     classMosaic:     () => call('classMosaic', {}),
+    submitReflection:(number, responses) => call('submitReflection', { number, responses }),
     releaseSection:  (teacherPin, section) => call('releaseSection',   { teacherPin, section }),
     unreleaseSection:(teacherPin, section) => call('unreleaseSection', { teacherPin, section }),
     ping:          ping,

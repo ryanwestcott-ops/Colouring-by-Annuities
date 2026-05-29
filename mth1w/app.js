@@ -208,6 +208,34 @@
         '</div>' +
       '</div>');
     root.appendChild(header);
+
+    // Learning Goal + Success Criteria (collapsible).
+    const goalCollapsed = localStorage.getItem('mosaic.mth1w.goalCollapsed.v1') === '1';
+    const goal = document.createElement('div');
+    goal.className = 'goal-card card' + (goalCollapsed ? ' collapsed' : '');
+    setHTML(goal,
+      '<button class="goal-toggle" id="goal-toggle" type="button">' +
+        '<span class="goal-arrow">' + (goalCollapsed ? '▸' : '▾') + '</span>' +
+        '<span><strong>Learning goal &amp; success criteria</strong></span>' +
+      '</button>' +
+      '<div class="goal-body">' +
+        '<p style="margin:6px 0 4px;"><strong>Learning Goal:</strong> I can solve financial literacy and data problems by choosing the correct formula, substituting values, and explaining my reasoning.</p>' +
+        '<p style="margin:0;"><strong>Success Criteria:</strong></p>' +
+        '<ul style="margin:4px 0 0;padding-left:22px;">' +
+          '<li>I can identify the known values in the question.</li>' +
+          '<li>I can choose the correct formula or strategy.</li>' +
+          '<li>I can calculate accurately and check my arithmetic.</li>' +
+          '<li>I can interpret my answer in context (units, rounding, real-world meaning).</li>' +
+        '</ul>' +
+      '</div>'
+    );
+    root.appendChild(goal);
+    goal.querySelector('#goal-toggle').onclick = () => {
+      const isCollapsed = goal.classList.toggle('collapsed');
+      goal.querySelector('.goal-arrow').textContent = isCollapsed ? '▸' : '▾';
+      localStorage.setItem('mosaic.mth1w.goalCollapsed.v1', isCollapsed ? '1' : '0');
+    };
+
     const layout = document.createElement('div');
     layout.className = 'student-layout';
     root.appendChild(layout);
@@ -223,12 +251,88 @@
       }
       qList.appendChild(renderQuestionCard(q, idx, colors, slots));
     });
+
+    // Final reflection (renders after every question is solved)
+    if (solved === 12) {
+      qList.appendChild(renderReflectionCard());
+    }
+
     gridWrap.appendChild(renderMosaic(sheet, colors, slots));
     if (solved === 12) {
       const banner = document.createElement('div'); banner.className = 'complete-banner';
-      setHTML(banner, '<h2 style="color:white;">Section complete</h2><p>Nice work.</p>');
+      setHTML(banner, '<h2 style="color:white;">Section complete</h2><p>Nice work — scroll down to reflect on what you learned.</p>');
       gridWrap.appendChild(banner);
     }
+  }
+
+  function renderReflectionCard() {
+    const card = document.createElement('div');
+    card.className = 'card reflection-card';
+    // Restore prior reflection from localStorage so students can come back to it
+    const lsKey = 'mosaic.mth1w.reflection.' + (state.student && state.student.number);
+    let prior = {};
+    try { const raw = localStorage.getItem(lsKey); if (raw) prior = JSON.parse(raw); } catch (_) {}
+    const submittedKey = lsKey + '.submitted';
+    const submitted = localStorage.getItem(submittedKey) === '1';
+
+    setHTML(card,
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">' +
+        '<span style="font-size:20px;">📝</span>' +
+        '<h3 style="margin:0;">Final reflection</h3>' +
+      '</div>' +
+      '<p style="margin:0 0 12px;color:var(--ink-soft);font-size:14px;">' +
+        'You\'ve finished your section. Take 2 minutes to reflect — this counts toward Communication and Application.' +
+      '</p>' +
+      '<div class="reflection-field"><label>1. One financial literacy or data idea I understand better now is...</label>' +
+        '<textarea id="refl-1" rows="2" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;resize:vertical;">' + escapeHtml(prior.q1 || '') + '</textarea></div>' +
+      '<div class="reflection-field"><label>2. One mistake I had to fix was...</label>' +
+        '<textarea id="refl-2" rows="2" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;resize:vertical;">' + escapeHtml(prior.q2 || '') + '</textarea></div>' +
+      '<div class="reflection-field"><label>3. One place people use this math in real life is...</label>' +
+        '<textarea id="refl-3" rows="2" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;resize:vertical;">' + escapeHtml(prior.q3 || '') + '</textarea></div>' +
+      '<div style="margin-top:12px;display:flex;align-items:center;gap:12px;">' +
+        '<button class="primary" id="refl-submit">' + (submitted ? 'Update reflection' : 'Submit reflection') + '</button>' +
+        '<span id="refl-status" style="font-size:13px;color:var(--ink-soft);">' + (submitted ? '✓ Submitted' : '') + '</span>' +
+      '</div>'
+    );
+    // Autosave per-textarea on input
+    ['refl-1', 'refl-2', 'refl-3'].forEach(id => {
+      const el = card.querySelector('#' + id);
+      let t;
+      el.addEventListener('input', () => {
+        clearTimeout(t);
+        t = setTimeout(() => {
+          const obj = {
+            q1: card.querySelector('#refl-1').value,
+            q2: card.querySelector('#refl-2').value,
+            q3: card.querySelector('#refl-3').value
+          };
+          try { localStorage.setItem(lsKey, JSON.stringify(obj)); } catch (_) {}
+        }, 600);
+      });
+    });
+    card.querySelector('#refl-submit').onclick = async () => {
+      const responses = {
+        q1: card.querySelector('#refl-1').value,
+        q2: card.querySelector('#refl-2').value,
+        q3: card.querySelector('#refl-3').value
+      };
+      const statusEl = card.querySelector('#refl-status');
+      statusEl.textContent = 'Saving…';
+      try {
+        const r = await API.submitReflection(state.student.number, responses);
+        if (r && r.ok) {
+          statusEl.textContent = '✓ Submitted';
+          localStorage.setItem(submittedKey, '1');
+          card.querySelector('#refl-submit').textContent = 'Update reflection';
+          toast('Reflection submitted');
+        } else {
+          statusEl.textContent = '✗ ' + (r && r.error || 'failed');
+        }
+      } catch (err) {
+        statusEl.textContent = '✗ Could not reach server (saved locally)';
+      }
+    };
+    return card;
   }
 
   function renderQuestionCard(q, idx, colors, slots) {
