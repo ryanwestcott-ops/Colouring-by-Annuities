@@ -384,46 +384,274 @@
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
       renderHintButtons(idx, card);
-      attachAutosave(idx, card);
+      attachAutosave(idx, card, q);
     }
     return card;
   }
 
-  function renderShowYourWorkHTML(q, idx) {
-    // Restore from server setup, OR localStorage autosave (whichever is freshest).
-    const setup = (state.student.setups && state.student.setups[idx]) || {};
-    const localKey = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
-    const local = localStorage.getItem(localKey);
-    const prior = (local && local.length > 0) ? local : (setup.work || '');
-    const tpl = 'Formula:\nSubstitute:\nSolve:\nFinal answer:';
-    return '<div class="show-work" id="setup-' + idx + '">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">' +
-        '<label style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-soft);margin:0;">My work</label>' +
-        '<span style="font-size:11px;color:var(--ink-soft);" id="work-status-' + idx + '"></span>' +
-      '</div>' +
-      '<textarea id="work-' + idx + '" rows="5" placeholder="' + escapeHtml(tpl) + '" ' +
-        'style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;resize:vertical;font-family:inherit;font-size:14px;">' +
-        escapeHtml(prior) +
-      '</textarea>' +
-    '</div>';
+  // Topic-aware "Show your work" template. Returns { formula, fields[] } or null.
+  function workTemplateFor(q) {
+    const p = q.params || {};
+    switch (q.type) {
+      case 'simple_interest_find_I':
+        return { formula: 'I = P × r × t', intro: 'Find each known value, write the rate as a decimal, then multiply.',
+          fields: [
+            { key: 'P', label: 'P (principal, $)', expected: p.P },
+            { key: 'r', label: 'r (rate as decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'simple_interest_find_P':
+        return { formula: 'P = I ÷ (r × t)', intro: 'Rearrange I = P × r × t to solve for P.',
+          fields: [
+            { key: 'I', label: 'I (interest earned, $)', expected: p.I },
+            { key: 'r', label: 'r (decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'compound_annual':
+        return { formula: 'A = P(1 + r)^t', intro: 'Identify P, r (as a decimal), and t.',
+          fields: [
+            { key: 'P', label: 'P (principal, $)', expected: p.P },
+            { key: 'r', label: 'r (decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'compound_periodic':
+        return { formula: 'A = P(1 + r/n)^(n·t)', intro: 'r is the ANNUAL rate. n = times per year it compounds.',
+          fields: [
+            { key: 'P', label: 'P (principal, $)', expected: p.P },
+            { key: 'r', label: 'r (annual decimal)', expected: p.r/100 },
+            { key: 'n', label: 'n (per year: 12, 4, 2)', expected: p.n },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'appreciation_exp':
+        return { formula: 'V = V₀(1 + r)^t', intro: 'Appreciation grows: use (1 + r).',
+          fields: [
+            { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
+            { key: 'r', label: 'r (decimal)', expected: p.r/100 },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'depreciation_exp':
+        return { formula: 'V = V₀(1 − r)^t', intro: 'Depreciation shrinks: use (1 − r).',
+          fields: [
+            { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
+            { key: 'r', label: 'r (decimal)', expected: p.r/100 },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'budgeting_savings':
+        return { formula: 'Savings = Income − Total expenses',
+          fields: [
+            { key: 'income', label: 'Income ($/month)', expected: p.income },
+            { key: 'expenses', label: 'Total expenses ($)', expected: p.expenses, hint: 'Add up every expense first' }
+          ] };
+      case 'budgeting_percent':
+        return { formula: '% = (Amount ÷ Income) × 100',
+          fields: [
+            { key: 'amount', label: 'Amount on category ($)', expected: p.amount },
+            { key: 'income', label: 'Total income ($)', expected: p.income }
+          ] };
+      case 'loan_payment':
+        return { formula: 'A = P · r(1+r)^n / [(1+r)^n − 1]', intro: 'r is the MONTHLY rate, n is total months.',
+          fields: [
+            { key: 'P', label: 'P (principal, $)', expected: p.P },
+            { key: 'r_monthly', label: 'r (monthly decimal)', expected: p.r_annual/100/12, hint: 'Annual % ÷ 100 ÷ 12' },
+            { key: 'n', label: 'n (total months)', expected: p.years * 12, hint: 'Years × 12' }
+          ] };
+      case 'dm_mean': {
+        const data = p.data || [];
+        const sum = data.reduce(function(a,b){return a+b;}, 0);
+        return { formula: 'Mean = Sum ÷ Count',
+          fields: [
+            { key: 'sum', label: 'Sum of all values', expected: sum, hint: 'Add up every value' },
+            { key: 'count', label: 'Count (how many values)', expected: data.length }
+          ] };
+      }
+      case 'dm_median': {
+        const data = p.data || [];
+        const sorted = data.slice().sort(function(a,b){return a-b;});
+        const midIdx = Math.floor(sorted.length/2);
+        return { formula: 'Sort the data, find the middle value.',
+          fields: [
+            { key: 'count', label: 'Count (how many values)', expected: data.length },
+            { key: 'mid_position', label: 'Position of middle value', expected: midIdx + 1, hint: 'For 7 values, that\'s position 4' },
+            { key: 'mid_value', label: 'Value at the middle position', expected: sorted[midIdx] }
+          ] };
+      }
+      case 'dm_mode': {
+        const data = p.data || [];
+        const mode = p.mode_value;
+        const occ = data.filter(function(v){return v === mode;}).length;
+        return { formula: 'Mode = value that appears most often',
+          fields: [
+            { key: 'mode_occurrences', label: 'Times the mode appears', expected: occ, hint: 'Count how often each value shows up' }
+          ] };
+      }
+      case 'dm_range': {
+        const data = p.data || [];
+        return { formula: 'Range = Max − Min',
+          fields: [
+            { key: 'max', label: 'Max (largest value)', expected: Math.max.apply(null, data) },
+            { key: 'min', label: 'Min (smallest value)', expected: Math.min.apply(null, data) }
+          ] };
+      }
+      case 'dm_iqr':
+        return { formula: 'IQR = Q3 − Q1', intro: 'Q1 = median of the lower half. Q3 = median of the upper half.',
+          fields: [
+            { key: 'q1', label: 'Q1 (lower-half median)', expected: p.q1 },
+            { key: 'q3', label: 'Q3 (upper-half median)', expected: p.q3 }
+          ] };
+      case 'dm_prediction':
+        return { formula: 'y = m·x + b', intro: 'Substitute the given x into the line equation.',
+          fields: [
+            { key: 'm', label: 'm (slope)', expected: p.m },
+            { key: 'x', label: 'x (value to predict at)', expected: p.x },
+            { key: 'b', label: 'b (y-intercept)', expected: p.b }
+          ] };
+      case 'fl_discount':
+        return { formula: 'Sale = Original × (1 − pct/100)',
+          fields: [
+            { key: 'original', label: 'Original price ($)', expected: p.original },
+            { key: 'pct', label: 'Discount %', expected: p.pct }
+          ] };
+      case 'fl_tax_total':
+        return { formula: 'Total = Subtotal × (1 + rate/100)',
+          fields: [
+            { key: 'subtotal', label: 'Subtotal ($)', expected: p.subtotal },
+            { key: 'rate', label: 'Tax rate %', expected: p.rate }
+          ] };
+      case 'fl_tip_total':
+        return { formula: 'Total = Subtotal × (1 + pct/100)',
+          fields: [
+            { key: 'subtotal', label: 'Bill ($)', expected: p.subtotal },
+            { key: 'pct', label: 'Tip %', expected: p.pct }
+          ] };
+    }
+    return null;
   }
 
-  // Attaches debounced localStorage autosave. Pass the (in-memory) card element
-  // so we don't hit a null document.getElementById before append.
-  function attachAutosave(idx, scope) {
-    const root = scope || document;
-    const ta = root.querySelector('#work-' + idx);
-    const status = root.querySelector('#work-status-' + idx);
-    if (!ta) return;
-    const key = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
-    let t = null;
-    ta.addEventListener('input', () => {
-      if (status) status.textContent = '…';
-      clearTimeout(t);
-      t = setTimeout(() => {
-        try { localStorage.setItem(key, ta.value); if (status) status.textContent = 'saved'; } catch (_) {}
-      }, 800);
+  function approxEqField(num, expected) {
+    if (expected == null || num == null || isNaN(num)) return false;
+    const tol = Math.max(Math.abs(expected) * 0.005, 0.0005);
+    return Math.abs(Number(num) - Number(expected)) <= tol;
+  }
+
+  function renderShowYourWorkHTML(q, idx) {
+    const tpl = workTemplateFor(q);
+    // Restore saved values (from localStorage or server) so students see their previous work.
+    const setup = (state.student.setups && state.student.setups[idx]) || {};
+    let savedWork = (typeof setup.work === 'object' && setup.work !== null) ? setup.work : {};
+    const localKey = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
+    try { const ls = localStorage.getItem(localKey); if (ls) { savedWork = JSON.parse(ls) || savedWork; } } catch (_) {}
+
+    let html = '<div class="show-work" id="setup-' + idx + '">';
+    html +=
+      '<div class="work-header">' +
+        '<label>Show your work</label>' +
+        '<span class="work-saved-indicator" id="work-status-' + idx + '"></span>' +
+      '</div>';
+    if (!tpl) {
+      // Fallback: plain textarea for any unknown topic
+      const notes = savedWork.notes || '';
+      html += '<textarea id="work-' + idx + '-notes" rows="4" placeholder="Show your formula, substitution, and arithmetic">' + escapeHtml(notes) + '</textarea>';
+      html += '</div>';
+      return html;
+    }
+    if (tpl.formula) {
+      html += '<div class="work-formula"><strong>Formula:</strong> <code>' + escapeHtml(tpl.formula) + '</code></div>';
+    }
+    if (tpl.intro) {
+      html += '<p class="work-intro">' + escapeHtml(tpl.intro) + '</p>';
+    }
+    html += '<div class="work-fields">';
+    tpl.fields.forEach(function (f) {
+      const val = (savedWork[f.key] != null && savedWork[f.key] !== '') ? savedWork[f.key] : '';
+      html += '<div class="work-field">' +
+        '<label for="work-' + idx + '-' + f.key + '">' + escapeHtml(f.label) + '</label>' +
+        '<input id="work-' + idx + '-' + f.key + '" data-key="' + f.key + '" type="number" step="any" inputmode="decimal" value="' + escapeHtml(String(val)) + '">' +
+        (f.hint ? '<small class="work-hint">' + escapeHtml(f.hint) + '</small>' : '') +
+      '</div>';
     });
+    html += '</div>';
+    const notes = savedWork.notes || '';
+    html += '<details class="work-notes"' + (notes ? ' open' : '') + '>' +
+      '<summary>Notes (optional)</summary>' +
+      '<textarea id="work-' + idx + '-notes" rows="2" placeholder="Anything else to write down...">' + escapeHtml(notes) + '</textarea>' +
+    '</details>';
+    html += '</div>';
+    return html;
+  }
+
+  // Read all work fields for a question as an object. Includes notes.
+  function readSetupFields(idx) {
+    const wrap = document.getElementById('setup-' + idx);
+    const work = {};
+    if (!wrap) return work;
+    wrap.querySelectorAll('input[data-key]').forEach(function (el) {
+      const k = el.getAttribute('data-key');
+      const v = el.value;
+      work[k] = (v === '' ? null : parseFloat(v));
+    });
+    const notesEl = wrap.querySelector('#work-' + idx + '-notes');
+    if (notesEl) work.notes = notesEl.value;
+    return work;
+  }
+
+  // Live validation per work field + bundled autosave to localStorage.
+  function attachAutosave(idx, scope, q) {
+    const root = scope || document;
+    const wrap = root.querySelector('#setup-' + idx);
+    if (!wrap) return;
+    const tpl = workTemplateFor(q);
+    const status = root.querySelector('#work-status-' + idx);
+    const lsKey = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
+    let t = null;
+
+    function readFromScope() {
+      const obj = {};
+      wrap.querySelectorAll('input[data-key]').forEach(function (el) {
+        const k = el.getAttribute('data-key');
+        const v = el.value;
+        obj[k] = (v === '' ? null : parseFloat(v));
+      });
+      const notesEl = wrap.querySelector('#work-' + idx + '-notes');
+      if (notesEl) obj.notes = notesEl.value;
+      return obj;
+    }
+
+    function validateField(el) {
+      el.classList.remove('correct', 'wrong');
+      const v = el.value;
+      if (v === '' || v == null) return;
+      if (!tpl) return;
+      const f = tpl.fields.find(function (x) { return x.key === el.getAttribute('data-key'); });
+      if (!f) return;
+      const num = parseFloat(v);
+      el.classList.add(approxEqField(num, f.expected) ? 'correct' : 'wrong');
+    }
+
+    function bind(el) {
+      el.addEventListener('input', function () {
+        validateField(el);
+        if (status) status.textContent = '…';
+        clearTimeout(t);
+        t = setTimeout(function () {
+          try { localStorage.setItem(lsKey, JSON.stringify(readFromScope())); } catch (_) {}
+          if (status) status.textContent = '✓ saved';
+        }, 600);
+      });
+      validateField(el);  // colour restored values immediately
+    }
+
+    wrap.querySelectorAll('input[data-key]').forEach(bind);
+    const notesEl = wrap.querySelector('#work-' + idx + '-notes');
+    if (notesEl) {
+      notesEl.addEventListener('input', function () {
+        if (status) status.textContent = '…';
+        clearTimeout(t);
+        t = setTimeout(function () {
+          try { localStorage.setItem(lsKey, JSON.stringify(readFromScope())); } catch (_) {}
+          if (status) status.textContent = '✓ saved';
+        }, 600);
+      });
+    }
   }
 
   function expectedSetup(q) {
@@ -569,9 +797,8 @@
   }
 
   function readSetup(idx) {
-    // MTH1W: setup is just the show-your-work textarea content.
-    const el = document.getElementById('work-' + idx);
-    return { work: el ? el.value : '' };
+    // MTH1W: setup is the structured work-fields object (per-key) + optional notes.
+    return { work: readSetupFields(idx) };
   }
 
   async function submitAnswer(q, idx) {

@@ -661,32 +661,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Sophia earns $4,500 per month and spends $417 on entertainment. What **percent** of Sophia's monthly income goes to entertainment? (Round to 2 decimal places.)",
-          "answer": 9.27,
+          "type": "fl_discount",
+          "text": "Sophia sees a sweater originally priced at **$129.99** marked **25% off**. What is the **sale price**?",
+          "answer": 97.49,
           "params": {
-            "income": 4500,
-            "amount": 417
+            "original": 129.99,
+            "pct": 25
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "found_discount",
+              "feedback": "Looks like you found the discount AMOUNT. Sale price = original \u00d7 (1 \u2212 pct/100), or original \u2212 discount."
+            },
+            {
+              "pattern": "added_pct",
+              "feedback": "A discount REDUCES the price. Use (1 \u2212 pct/100), not (1 + pct/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Aiden takes out a $30,000 car loan at 4% per year (compounded monthly) over 3 years. What is their **monthly payment**?",
-          "answer": 885.72,
+          "text": "Dakota takes out a $8,000 car loan at 7.5% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 360.0,
           "params": {
-            "P": 30000,
-            "r_annual": 4,
-            "years": 3
+            "P": 8000,
+            "r_annual": 7.5,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -704,12 +708,12 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 14, 18, 18, 24, 30. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 20.8,
+          "type": "dm_median",
+          "text": "A student records these test scores: 6, 18, 18, 24, 30. What is the **median**?",
+          "answer": 18.0,
           "params": {
             "data": [
-              14,
+              6,
               18,
               18,
               24,
@@ -721,37 +725,37 @@
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_instead",
+              "feedback": "The MEDIAN is the middle value once the data is sorted. (Mean = sum \u00f7 count.)"
             }
           ]
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 9, 23, 25, 26, 33, 44. What is the **range** of this data?",
-          "answer": 35.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 9, 16, 23, 25, 26, 27, 33, 44. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 10.5,
           "params": {
             "data": [
               9,
+              16,
               23,
               25,
               26,
+              27,
               33,
               44
-            ]
+            ],
+            "q1": 19.5,
+            "q3": 30.0
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
@@ -1048,32 +1052,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Kendra earns $3,500 per month and spends $1059 on rent. What **percent** of Kendra's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 30.26,
+          "type": "fl_tax_total",
+          "text": "Kendra's lunch bill is **$35.75** before tax. The HST is **5%**. What is the **total** they pay?",
+          "answer": 37.54,
           "params": {
-            "income": 3500,
-            "amount": 1059
+            "subtotal": 35.75,
+            "rate": 5
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tax_only",
+              "feedback": "Looks like you found just the TAX. Total = subtotal \u00d7 (1 + rate/100), or subtotal + tax."
+            },
+            {
+              "pattern": "subtracted",
+              "feedback": "Tax ADDS to the bill. Use (1 + rate/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Emma takes out a $10,000 car loan at 5% per year (compounded monthly) over 5 years. What is their **monthly payment**?",
-          "answer": 188.71,
+          "text": "Christian takes out a $15,000 car loan at 4.5% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 654.72,
           "params": {
-            "P": 10000,
-            "r_annual": 5,
-            "years": 5
+            "P": 15000,
+            "r_annual": 4.5,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -1091,46 +1099,44 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 15.67,
+          "type": "dm_mode",
+          "text": "A class records these shoe sizes: 26, 14, 16, 10, 14, 14. What is the **mode**?",
+          "answer": 14.0,
           "params": {
             "data": [
-              6,
-              11,
-              13,
-              15,
-              21,
-              28
-            ]
+              26,
+              14,
+              16,
+              10,
+              14,
+              14
+            ],
+            "mode_value": 14
           },
           "color": "brown",
           "curriculumTag": "MTH1W.DM.L1",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_or_median",
+              "feedback": "The MODE is the value that appears most often. Count occurrences."
             }
           ]
         },
         {
           "slot": 11,
           "type": "dm_range",
-          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
-          "answer": 33.0,
+          "text": "The data set is: 6, 6, 17, 38, 39, 45, 46. What is the **range** of this data?",
+          "answer": 40.0,
           "params": {
             "data": [
               6,
               6,
               17,
-              29,
               38,
-              39
+              39,
+              45,
+              46
             ]
           },
           "color": "skyblue",
@@ -1146,12 +1152,12 @@
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 10.0,
+          "text": "A scatter plot of minutes of practice (x) vs free throws made (y) has line of best fit **y = 2x + 20**. Predict the free throws made when minutes of practice = 8.",
+          "answer": 36.0,
           "params": {
-            "m": 2.5,
-            "b": -5,
-            "x": 6
+            "m": 2,
+            "b": 20,
+            "x": 8
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -1436,32 +1442,32 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 35.23,
+          "type": "fl_tip_total",
+          "text": "Priya's restaurant bill is **$35.00**. They want to leave a **10% tip**. What is the **total** they pay (bill + tip)?",
+          "answer": 38.5,
           "params": {
-            "income": 3500,
-            "amount": 1233
+            "subtotal": 35.0,
+            "pct": 10
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tip_only",
+              "feedback": "Looks like you found just the TIP. Total = subtotal \u00d7 (1 + pct/100), or subtotal + tip."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 126.99,
+          "text": "Sophia takes out a $20,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 868.5,
           "params": {
-            "P": 8000,
-            "r_annual": 4.5,
-            "years": 6
+            "P": 20000,
+            "r_annual": 4,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -1480,13 +1486,15 @@
         {
           "slot": 10,
           "type": "dm_mean",
-          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 14.6,
+          "text": "A student records these test scores: 2, 4, 6, 18, 23, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.29,
           "params": {
             "data": [
               2,
+              4,
               6,
               18,
+              23,
               23,
               24
             ]
@@ -1507,9 +1515,9 @@
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
-          "answer": 28.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 4.5,
           "params": {
             "data": [
               22,
@@ -1520,15 +1528,17 @@
               47,
               50,
               50
-            ]
+            ],
+            "q1": 44.0,
+            "q3": 48.5
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
@@ -1868,9 +1878,9 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 14, 18, 18, 24, 30. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 20.8,
+          "type": "dm_median",
+          "text": "A student records these test scores: 14, 18, 18, 24, 30. What is the **median**?",
+          "answer": 18.0,
           "params": {
             "data": [
               14,
@@ -1885,12 +1895,8 @@
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_instead",
+              "feedback": "The MEDIAN is the middle value once the data is sorted. (Mean = sum \u00f7 count.)"
             }
           ]
         },
@@ -2212,32 +2218,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Kendra earns $3,500 per month and spends $1059 on rent. What **percent** of Kendra's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 30.26,
+          "type": "fl_discount",
+          "text": "Kendra sees a sweater originally priced at **$75.00** marked **10% off**. What is the **sale price**?",
+          "answer": 67.5,
           "params": {
-            "income": 3500,
-            "amount": 1059
+            "original": 75.0,
+            "pct": 10
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "found_discount",
+              "feedback": "Looks like you found the discount AMOUNT. Sale price = original \u00d7 (1 \u2212 pct/100), or original \u2212 discount."
+            },
+            {
+              "pattern": "added_pct",
+              "feedback": "A discount REDUCES the price. Use (1 \u2212 pct/100), not (1 + pct/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Emma takes out a $10,000 car loan at 5% per year (compounded monthly) over 5 years. What is their **monthly payment**?",
-          "answer": 188.71,
+          "text": "Christian takes out a $15,000 car loan at 4.5% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 654.72,
           "params": {
-            "P": 10000,
-            "r_annual": 5,
-            "years": 5
+            "P": 15000,
+            "r_annual": 4.5,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -2255,38 +2265,35 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 15.67,
+          "type": "dm_mode",
+          "text": "A class records these shoe sizes: 26, 14, 16, 10, 14, 14. What is the **mode**?",
+          "answer": 14.0,
           "params": {
             "data": [
-              6,
-              11,
-              13,
-              15,
-              21,
-              28
-            ]
+              26,
+              14,
+              16,
+              10,
+              14,
+              14
+            ],
+            "mode_value": 14
           },
           "color": "brown",
           "curriculumTag": "MTH1W.DM.L1",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_or_median",
+              "feedback": "The MODE is the value that appears most often. Count occurrences."
             }
           ]
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
-          "answer": 33.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 6, 6, 17, 29, 38, 39, 45, 46. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 30.5,
           "params": {
             "data": [
               6,
@@ -2294,28 +2301,32 @@
               17,
               29,
               38,
-              39
-            ]
+              39,
+              45,
+              46
+            ],
+            "q1": 11.5,
+            "q3": 42.0
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 10.0,
+          "text": "A scatter plot of minutes of practice (x) vs free throws made (y) has line of best fit **y = 2x + 20**. Predict the free throws made when minutes of practice = 8.",
+          "answer": 36.0,
           "params": {
-            "m": 2.5,
-            "b": -5,
-            "x": 6
+            "m": 2,
+            "b": 20,
+            "x": 8
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -2600,32 +2611,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 35.23,
+          "type": "fl_tax_total",
+          "text": "Priya's lunch bill is **$35.75** before tax. The HST is **5%**. What is the **total** they pay?",
+          "answer": 37.54,
           "params": {
-            "income": 3500,
-            "amount": 1233
+            "subtotal": 35.75,
+            "rate": 5
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tax_only",
+              "feedback": "Looks like you found just the TAX. Total = subtotal \u00d7 (1 + rate/100), or subtotal + tax."
+            },
+            {
+              "pattern": "subtracted",
+              "feedback": "Tax ADDS to the bill. Use (1 + rate/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 126.99,
+          "text": "Sophia takes out a $20,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 868.5,
           "params": {
-            "P": 8000,
-            "r_annual": 4.5,
-            "years": 6
+            "P": 20000,
+            "r_annual": 4,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -2644,13 +2659,15 @@
         {
           "slot": 10,
           "type": "dm_mean",
-          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 14.6,
+          "text": "A student records these test scores: 2, 4, 6, 18, 23, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.29,
           "params": {
             "data": [
               2,
+              4,
               6,
               18,
+              23,
               23,
               24
             ]
@@ -2672,14 +2689,14 @@
         {
           "slot": 11,
           "type": "dm_range",
-          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
-          "answer": 28.0,
+          "text": "The data set is: 10, 22, 43, 45, 47, 47, 50, 50. What is the **range** of this data?",
+          "answer": 40.0,
           "params": {
             "data": [
+              10,
               22,
               43,
               45,
-              47,
               47,
               47,
               50,
@@ -2699,10 +2716,10 @@
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 3x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
-          "answer": 25.0,
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 2.5x + -5**. Predict the fuel used (L) when kilometres driven = 10.",
+          "answer": 20.0,
           "params": {
-            "m": 3,
+            "m": 2.5,
             "b": -5,
             "x": 10
           },
@@ -2989,32 +3006,32 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 34.2,
+          "type": "fl_tip_total",
+          "text": "Felix's restaurant bill is **$85.00**. They want to leave a **12% tip**. What is the **total** they pay (bill + tip)?",
+          "answer": 95.2,
           "params": {
-            "income": 3000,
-            "amount": 1026
+            "subtotal": 85.0,
+            "pct": 12
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tip_only",
+              "feedback": "Looks like you found just the TIP. Total = subtotal \u00d7 (1 + pct/100), or subtotal + tip."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 336.2,
+          "text": "Grace takes out a $20,000 car loan at 8% per year (compounded monthly) over 4 years. What is their **monthly payment**?",
+          "answer": 488.26,
           "params": {
             "P": 20000,
-            "r_annual": 6.5,
-            "years": 6
+            "r_annual": 8,
+            "years": 4
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -3032,17 +3049,17 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 17.57,
+          "type": "dm_median",
+          "text": "A student records these test scores: 9, 10, 11, 12, 19, 23, 30. What is the **median**?",
+          "answer": 12.0,
           "params": {
             "data": [
               9,
               10,
-              10,
               11,
-              24,
-              29,
+              12,
+              19,
+              23,
               30
             ]
           },
@@ -3051,50 +3068,49 @@
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_instead",
+              "feedback": "The MEDIAN is the middle value once the data is sorted. (Mean = sum \u00f7 count.)"
             }
           ]
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
-          "answer": 35.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 12, 18, 21, 34, 42, 45, 46, 47. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 26.0,
           "params": {
             "data": [
               12,
-              24,
+              18,
+              21,
               34,
               42,
               45,
-              45,
+              46,
               47
-            ]
+            ],
+            "q1": 19.5,
+            "q3": 45.5
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 25.0,
+          "text": "A scatter plot of hours studied per week (x) vs test score (y) has line of best fit **y = 2.5x + 15**. Predict the test score when hours studied per week = 12.",
+          "answer": 45.0,
           "params": {
-            "m": 5,
-            "b": -5,
-            "x": 6
+            "m": 2.5,
+            "b": 15,
+            "x": 12
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -3422,46 +3438,46 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 6, 11, 13, 15, 21, 28. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 15.67,
+          "type": "dm_mode",
+          "text": "A class records these shoe sizes: 6, 15, 6, 28, 6, 6, 13. What is the **mode**?",
+          "answer": 6.0,
           "params": {
             "data": [
               6,
-              11,
-              13,
               15,
-              21,
-              28
-            ]
+              6,
+              28,
+              6,
+              6,
+              13
+            ],
+            "mode_value": 6
           },
           "color": "brown",
           "curriculumTag": "MTH1W.DM.L1",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_or_median",
+              "feedback": "The MODE is the value that appears most often. Count occurrences."
             }
           ]
         },
         {
           "slot": 11,
           "type": "dm_range",
-          "text": "The data set is: 6, 6, 17, 29, 38, 39. What is the **range** of this data?",
-          "answer": 33.0,
+          "text": "The data set is: 3, 6, 13, 23, 32, 45, 46, 48. What is the **range** of this data?",
+          "answer": 45.0,
           "params": {
             "data": [
+              3,
               6,
-              6,
-              17,
-              29,
-              38,
-              39
+              13,
+              23,
+              32,
+              45,
+              46,
+              48
             ]
           },
           "color": "skyblue",
@@ -3477,12 +3493,12 @@
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 10.0,
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 2.5x + -5**. Predict the fuel used (L) when kilometres driven = 15.",
+          "answer": 32.5,
           "params": {
             "m": 2.5,
             "b": -5,
-            "x": 6
+            "x": 15
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -3767,32 +3783,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Priya earns $3,500 per month and spends $1233 on rent. What **percent** of Priya's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 35.23,
+          "type": "fl_discount",
+          "text": "Priya sees a sweater originally priced at **$75.00** marked **10% off**. What is the **sale price**?",
+          "answer": 67.5,
           "params": {
-            "income": 3500,
-            "amount": 1233
+            "original": 75.0,
+            "pct": 10
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "found_discount",
+              "feedback": "Looks like you found the discount AMOUNT. Sale price = original \u00d7 (1 \u2212 pct/100), or original \u2212 discount."
+            },
+            {
+              "pattern": "added_pct",
+              "feedback": "A discount REDUCES the price. Use (1 \u2212 pct/100), not (1 + pct/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Wei takes out a $8,000 car loan at 4.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 126.99,
+          "text": "Sophia takes out a $20,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
+          "answer": 868.5,
           "params": {
-            "P": 8000,
-            "r_annual": 4.5,
-            "years": 6
+            "P": 20000,
+            "r_annual": 4,
+            "years": 2
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -3811,13 +3831,15 @@
         {
           "slot": 10,
           "type": "dm_mean",
-          "text": "A student records these test scores: 2, 6, 18, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 14.6,
+          "text": "A student records these test scores: 2, 4, 6, 18, 23, 23, 24. What is the **mean** (rounded to 2 decimal places)?",
+          "answer": 14.29,
           "params": {
             "data": [
               2,
+              4,
               6,
               18,
+              23,
               23,
               24
             ]
@@ -3838,9 +3860,9 @@
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **range** of this data?",
-          "answer": 28.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 22, 43, 45, 47, 47, 47, 50, 50. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 4.5,
           "params": {
             "data": [
               22,
@@ -3851,15 +3873,17 @@
               47,
               50,
               50
-            ]
+            ],
+            "q1": 44.0,
+            "q3": 48.5
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
@@ -4156,32 +4180,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 34.2,
+          "type": "fl_tax_total",
+          "text": "Felix's lunch bill is **$199.99** before tax. The HST is **8%**. What is the **total** they pay?",
+          "answer": 215.99,
           "params": {
-            "income": 3000,
-            "amount": 1026
+            "subtotal": 199.99,
+            "rate": 8
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tax_only",
+              "feedback": "Looks like you found just the TAX. Total = subtotal \u00d7 (1 + rate/100), or subtotal + tax."
+            },
+            {
+              "pattern": "subtracted",
+              "feedback": "Tax ADDS to the bill. Use (1 + rate/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 336.2,
+          "text": "Grace takes out a $20,000 car loan at 8% per year (compounded monthly) over 4 years. What is their **monthly payment**?",
+          "answer": 488.26,
           "params": {
             "P": 20000,
-            "r_annual": 6.5,
-            "years": 6
+            "r_annual": 8,
+            "years": 4
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -4199,17 +4227,17 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 17.57,
+          "type": "dm_median",
+          "text": "A student records these test scores: 9, 10, 11, 12, 19, 23, 30. What is the **median**?",
+          "answer": 12.0,
           "params": {
             "data": [
               9,
               10,
-              10,
               11,
-              24,
-              29,
+              12,
+              19,
+              23,
               30
             ]
           },
@@ -4218,28 +4246,24 @@
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_instead",
+              "feedback": "The MEDIAN is the middle value once the data is sorted. (Mean = sum \u00f7 count.)"
             }
           ]
         },
         {
           "slot": 11,
           "type": "dm_range",
-          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
+          "text": "The data set is: 12, 21, 34, 42, 45, 46, 47. What is the **range** of this data?",
           "answer": 35.0,
           "params": {
             "data": [
               12,
-              24,
+              21,
               34,
               42,
               45,
-              45,
+              46,
               47
             ]
           },
@@ -4256,12 +4280,12 @@
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 25.0,
+          "text": "A scatter plot of hours studied per week (x) vs test score (y) has line of best fit **y = 2.5x + 15**. Predict the test score when hours studied per week = 12.",
+          "answer": 45.0,
           "params": {
-            "m": 5,
-            "b": -5,
-            "x": 6
+            "m": 2.5,
+            "b": 15,
+            "x": 12
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -4546,32 +4570,32 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Priya earns $3,200 per month and spends $416 on food. What **percent** of Priya's monthly income goes to food? (Round to 2 decimal places.)",
-          "answer": 13.0,
+          "type": "fl_tip_total",
+          "text": "Priya's restaurant bill is **$24.75**. They want to leave a **20% tip**. What is the **total** they pay (bill + tip)?",
+          "answer": 29.7,
           "params": {
-            "income": 3200,
-            "amount": 416
+            "subtotal": 24.75,
+            "pct": 20
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tip_only",
+              "feedback": "Looks like you found just the TIP. Total = subtotal \u00d7 (1 + pct/100), or subtotal + tip."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Ryan takes out a $18,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
-          "answer": 781.65,
+          "text": "Olivia takes out a $12,000 car loan at 8% per year (compounded monthly) over 4 years. What is their **monthly payment**?",
+          "answer": 292.96,
           "params": {
-            "P": 18000,
-            "r_annual": 4,
-            "years": 2
+            "P": 12000,
+            "r_annual": 8,
+            "years": 4
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -4589,68 +4613,69 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 7, 7, 15, 19, 21. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 13.8,
+          "type": "dm_mode",
+          "text": "A class records these shoe sizes: 7, 4, 11, 11, 11, 4, 2. What is the **mode**?",
+          "answer": 11.0,
           "params": {
             "data": [
               7,
-              7,
-              15,
-              19,
-              21
-            ]
+              4,
+              11,
+              11,
+              11,
+              4,
+              2
+            ],
+            "mode_value": 11
           },
           "color": "brown",
           "curriculumTag": "MTH1W.DM.L1",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_or_median",
+              "feedback": "The MODE is the value that appears most often. Count occurrences."
             }
           ]
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 6, 6, 14, 22, 24, 41, 45, 48. What is the **range** of this data?",
-          "answer": 42.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 6, 14, 20, 22, 30, 41, 45, 45. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 26.0,
           "params": {
             "data": [
               6,
-              6,
               14,
+              20,
               22,
-              24,
+              30,
               41,
               45,
-              48
-            ]
+              45
+            ],
+            "q1": 17.0,
+            "q3": 43.0
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + 20**. Predict the books read when days into the school year = 10.",
-          "answer": 45.0,
+          "text": "A scatter plot of hours studied per week (x) vs test score (y) has line of best fit **y = 5x + 5**. Predict the test score when hours studied per week = 15.",
+          "answer": 80.0,
           "params": {
-            "m": 2.5,
-            "b": 20,
-            "x": 10
+            "m": 5,
+            "b": 5,
+            "x": 15
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -5324,32 +5349,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Felix earns $3,000 per month and spends $1026 on rent. What **percent** of Felix's monthly income goes to rent? (Round to 2 decimal places.)",
-          "answer": 34.2,
+          "type": "fl_discount",
+          "text": "Felix sees a sweater originally priced at **$49.99** marked **30% off**. What is the **sale price**?",
+          "answer": 34.99,
           "params": {
-            "income": 3000,
-            "amount": 1026
+            "original": 49.99,
+            "pct": 30
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "found_discount",
+              "feedback": "Looks like you found the discount AMOUNT. Sale price = original \u00d7 (1 \u2212 pct/100), or original \u2212 discount."
+            },
+            {
+              "pattern": "added_pct",
+              "feedback": "A discount REDUCES the price. Use (1 \u2212 pct/100), not (1 + pct/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Tomas takes out a $20,000 car loan at 6.5% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
-          "answer": 336.2,
+          "text": "Grace takes out a $20,000 car loan at 8% per year (compounded monthly) over 4 years. What is their **monthly payment**?",
+          "answer": 488.26,
           "params": {
             "P": 20000,
-            "r_annual": 6.5,
-            "years": 6
+            "r_annual": 8,
+            "years": 4
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -5367,17 +5396,17 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 9, 10, 10, 11, 24, 29, 30. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 17.57,
+          "type": "dm_median",
+          "text": "A student records these test scores: 9, 10, 11, 12, 19, 23, 30. What is the **median**?",
+          "answer": 12.0,
           "params": {
             "data": [
               9,
               10,
-              10,
               11,
-              24,
-              29,
+              12,
+              19,
+              23,
               30
             ]
           },
@@ -5386,50 +5415,49 @@
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_instead",
+              "feedback": "The MEDIAN is the middle value once the data is sorted. (Mean = sum \u00f7 count.)"
             }
           ]
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 12, 24, 34, 42, 45, 45, 47. What is the **range** of this data?",
-          "answer": 35.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 12, 18, 21, 34, 42, 45, 46, 47. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 26.0,
           "params": {
             "data": [
               12,
-              24,
+              18,
+              21,
               34,
               42,
               45,
-              45,
+              46,
               47
-            ]
+            ],
+            "q1": 19.5,
+            "q3": 45.5
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 5x + -5**. Predict the books read when days into the school year = 6.",
-          "answer": 25.0,
+          "text": "A scatter plot of hours studied per week (x) vs test score (y) has line of best fit **y = 2.5x + 15**. Predict the test score when hours studied per week = 12.",
+          "answer": 45.0,
           "params": {
-            "m": 5,
-            "b": -5,
-            "x": 6
+            "m": 2.5,
+            "b": 15,
+            "x": 12
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -5714,32 +5742,36 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Priya earns $3,200 per month and spends $416 on food. What **percent** of Priya's monthly income goes to food? (Round to 2 decimal places.)",
-          "answer": 13.0,
+          "type": "fl_tax_total",
+          "text": "Priya's lunch bill is **$24.99** before tax. The HST is **8%**. What is the **total** they pay?",
+          "answer": 26.99,
           "params": {
-            "income": 3200,
-            "amount": 416
+            "subtotal": 24.99,
+            "rate": 8
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tax_only",
+              "feedback": "Looks like you found just the TAX. Total = subtotal \u00d7 (1 + rate/100), or subtotal + tax."
+            },
+            {
+              "pattern": "subtracted",
+              "feedback": "Tax ADDS to the bill. Use (1 + rate/100)."
             }
           ]
         },
         {
           "slot": 9,
           "type": "loan_payment",
-          "text": "Ryan takes out a $18,000 car loan at 4% per year (compounded monthly) over 2 years. What is their **monthly payment**?",
-          "answer": 781.65,
+          "text": "Kendra takes out a $18,000 car loan at 6% per year (compounded monthly) over 6 years. What is their **monthly payment**?",
+          "answer": 298.31,
           "params": {
             "P": 18000,
-            "r_annual": 4,
-            "years": 2
+            "r_annual": 6,
+            "years": 6
           },
           "color": "yellow",
           "curriculumTag": "MTH1W.FL.L5",
@@ -5757,47 +5789,45 @@
         },
         {
           "slot": 10,
-          "type": "dm_mean",
-          "text": "A student records these test scores: 7, 7, 15, 19, 21. What is the **mean** (rounded to 2 decimal places)?",
-          "answer": 13.8,
+          "type": "dm_mode",
+          "text": "A class records these shoe sizes: 4, 15, 3, 3, 3, 7. What is the **mode**?",
+          "answer": 3.0,
           "params": {
             "data": [
-              7,
-              7,
+              4,
               15,
-              19,
-              21
-            ]
+              3,
+              3,
+              3,
+              7
+            ],
+            "mode_value": 3
           },
           "color": "brown",
           "curriculumTag": "MTH1W.DM.L1",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "median_instead",
-              "feedback": "The question asks for the MEAN (average). Median is the middle value."
-            },
-            {
-              "pattern": "missed_division",
-              "feedback": "Mean = sum of values \u00f7 count of values."
+              "pattern": "mean_or_median",
+              "feedback": "The MODE is the value that appears most often. Count occurrences."
             }
           ]
         },
         {
           "slot": 11,
           "type": "dm_range",
-          "text": "The data set is: 6, 6, 14, 22, 24, 41, 45, 48. What is the **range** of this data?",
-          "answer": 42.0,
+          "text": "The data set is: 6, 14, 20, 22, 30, 30, 45, 45. What is the **range** of this data?",
+          "answer": 39.0,
           "params": {
             "data": [
               6,
-              6,
               14,
+              20,
               22,
-              24,
-              41,
+              30,
+              30,
               45,
-              48
+              45
             ]
           },
           "color": "skyblue",
@@ -5813,12 +5843,12 @@
         {
           "slot": 12,
           "type": "dm_prediction",
-          "text": "A scatter plot of days into the school year (x) vs books read (y) has line of best fit **y = 2.5x + 20**. Predict the books read when days into the school year = 10.",
-          "answer": 45.0,
+          "text": "A scatter plot of kilometres driven (x) vs fuel used (L) (y) has line of best fit **y = 2x + 0**. Predict the fuel used (L) when kilometres driven = 6.",
+          "answer": 12.0,
           "params": {
-            "m": 2.5,
-            "b": 20,
-            "x": 10
+            "m": 2,
+            "b": 0,
+            "x": 6
           },
           "color": "green",
           "curriculumTag": "MTH1W.DM.L3",
@@ -6103,20 +6133,20 @@
         },
         {
           "slot": 8,
-          "type": "budgeting_percent",
-          "text": "Sophia earns $3,000 per month and spends $261 on entertainment. What **percent** of Sophia's monthly income goes to entertainment? (Round to 2 decimal places.)",
-          "answer": 8.7,
+          "type": "fl_tip_total",
+          "text": "Sophia's restaurant bill is **$24.75**. They want to leave a **18% tip**. What is the **total** they pay (bill + tip)?",
+          "answer": 29.21,
           "params": {
-            "income": 3000,
-            "amount": 261
+            "subtotal": 24.75,
+            "pct": 18
           },
           "color": "black",
           "curriculumTag": "MTH1W.FL.L4",
           "difficulty": "multistep",
           "commonErrors": [
             {
-              "pattern": "ratio_wrong_way",
-              "feedback": "Percent of income = (amount / income) \u00d7 100, not (income / amount) \u00d7 100."
+              "pattern": "tip_only",
+              "feedback": "Looks like you found just the TIP. Total = subtotal \u00d7 (1 + pct/100), or subtotal + tip."
             }
           ]
         },
@@ -6175,9 +6205,9 @@
         },
         {
           "slot": 11,
-          "type": "dm_range",
-          "text": "The data set is: 3, 3, 20, 25, 36, 47, 47, 50. What is the **range** of this data?",
-          "answer": 47.0,
+          "type": "dm_iqr",
+          "text": "The data set is: 3, 3, 20, 25, 36, 39, 47, 47. What is the **interquartile range (IQR)**? (Q1 = median of lower half, Q3 = median of upper half, IQR = Q3 \u2212 Q1.)",
+          "answer": 31.5,
           "params": {
             "data": [
               3,
@@ -6185,18 +6215,20 @@
               20,
               25,
               36,
+              39,
               47,
-              47,
-              50
-            ]
+              47
+            ],
+            "q1": 11.5,
+            "q3": 43.0
           },
           "color": "skyblue",
           "curriculumTag": "MTH1W.DM.L2",
           "difficulty": "challenge",
           "commonErrors": [
             {
-              "pattern": "iqr_instead",
-              "feedback": "Range = max \u2212 min of the whole data set. (IQR would be Q3 \u2212 Q1.)"
+              "pattern": "range_instead",
+              "feedback": "IQR \u2260 range. IQR = Q3 \u2212 Q1 (Q1 = median of lower half, Q3 = median of upper half)."
             }
           ]
         },
