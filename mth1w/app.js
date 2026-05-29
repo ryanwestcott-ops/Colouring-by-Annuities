@@ -280,7 +280,7 @@
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
       renderHintButtons(idx, card);
-      attachAutosave(idx);
+      attachAutosave(idx, card);
     }
     return card;
   }
@@ -304,10 +304,12 @@
     '</div>';
   }
 
-  // Attaches debounced localStorage autosave to the textarea, called after card is in DOM.
-  function attachAutosave(idx) {
-    const ta = document.getElementById('work-' + idx);
-    const status = document.getElementById('work-status-' + idx);
+  // Attaches debounced localStorage autosave. Pass the (in-memory) card element
+  // so we don't hit a null document.getElementById before append.
+  function attachAutosave(idx, scope) {
+    const root = scope || document;
+    const ta = root.querySelector('#work-' + idx);
+    const status = root.querySelector('#work-status-' + idx);
     if (!ta) return;
     const key = 'mosaic.mth1w.work.' + (state.student && state.student.number) + '.' + idx;
     let t = null;
