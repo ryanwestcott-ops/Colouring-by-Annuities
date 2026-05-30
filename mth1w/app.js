@@ -230,36 +230,29 @@
     const slots = state.sheets.questionColorSlots;
     const root = document.getElementById('app');
     setHTML(root, '');
-    const header = document.createElement('div');
-    header.className = 'student-header';
-    const solved = (state.student.answers || []).filter(a => a && a.correct).length;
-    const hintBudget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
-    const creditsSpent = state.student.hintCreditsSpent || 0;
-    const creditsLeft = Math.max(hintBudget - creditsSpent, 0);
-    setHTML(header,
-      '<div class="section-badge"><span class="badge-eyebrow">YOUR TILE</span><span class="badge-id">' + escapeHtml(state.student.sheetId) + '</span></div>' +
-      '<div class="student-meta">' +
-        '<h2>Hey ' + escapeHtml(state.student.name) + ' 👋</h2>' +
-        '<div class="sub student-tagline">' +
-          'Solve your <strong>18 questions</strong> to colour in tile <strong>' + escapeHtml(state.student.sheetId) + '</strong> of the class mosaic.' +
-        '</div>' +
-        '<div class="sub" style="margin-top:2px;">Student #' + escapeHtml(state.student.number) + ' · MTH1W' + '</div>' +
-      '</div>');
-    root.appendChild(header);
-
-    // Learning Goal + Success Criteria (collapsible).
+    // Top card: greeting + tile + Learning Goal accordion all in one composed surface.
     const goalCollapsed = localStorage.getItem('mosaic.mth1w.goalCollapsed.v1') === '1';
-    const goal = document.createElement('div');
-    goal.className = 'goal-card card' + (goalCollapsed ? ' collapsed' : '');
-    setHTML(goal,
-      '<button class="goal-toggle" id="goal-toggle" type="button">' +
-        '<span class="goal-arrow">' + (goalCollapsed ? '▸' : '▾') + '</span>' +
+    const topCard = document.createElement('div');
+    topCard.className = 'top-card' + (goalCollapsed ? ' goal-collapsed' : '');
+    setHTML(topCard,
+      '<div class="top-card-main">' +
+        '<div class="section-badge"><span class="badge-eyebrow">YOUR TILE</span><span class="badge-id">' + escapeHtml(state.student.sheetId) + '</span></div>' +
+        '<div class="student-meta">' +
+          '<h2 class="greet">Hey ' + escapeHtml(state.student.name) + ' <span class="greet-wave">👋</span></h2>' +
+          '<p class="student-tagline">' +
+            'Solve your <span class="goal-pill">18 questions</span> to colour in tile <strong>' + escapeHtml(state.student.sheetId) + '</strong> of the class mosaic.' +
+          '</p>' +
+          '<p class="meta-line">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W</p>' +
+        '</div>' +
+      '</div>' +
+      '<button class="goal-toggle" id="goal-toggle" type="button" aria-expanded="' + (goalCollapsed ? 'false' : 'true') + '">' +
         '<span><strong>Learning goal &amp; success criteria</strong></span>' +
+        '<span class="goal-arrow" aria-hidden="true">' + (goalCollapsed ? '›' : '⌄') + '</span>' +
       '</button>' +
       '<div class="goal-body">' +
-        '<p style="margin:6px 0 4px;"><strong>Learning Goal:</strong> I can solve financial literacy and data problems by choosing the correct formula, substituting values, and explaining my reasoning.</p>' +
-        '<p style="margin:0;"><strong>Success Criteria:</strong></p>' +
-        '<ul style="margin:4px 0 0;padding-left:22px;">' +
+        '<p><strong>Learning Goal:</strong> I can solve financial literacy and data problems by choosing the correct formula, substituting values, and explaining my reasoning.</p>' +
+        '<p><strong>Success Criteria:</strong></p>' +
+        '<ul>' +
           '<li>I can identify the known values in the question.</li>' +
           '<li>I can choose the correct formula or strategy.</li>' +
           '<li>I can calculate accurately and check my arithmetic.</li>' +
@@ -267,10 +260,11 @@
         '</ul>' +
       '</div>'
     );
-    root.appendChild(goal);
-    goal.querySelector('#goal-toggle').onclick = () => {
-      const isCollapsed = goal.classList.toggle('collapsed');
-      goal.querySelector('.goal-arrow').textContent = isCollapsed ? '▸' : '▾';
+    root.appendChild(topCard);
+    topCard.querySelector('#goal-toggle').onclick = () => {
+      const isCollapsed = topCard.classList.toggle('goal-collapsed');
+      topCard.querySelector('.goal-arrow').textContent = isCollapsed ? '›' : '⌄';
+      topCard.querySelector('#goal-toggle').setAttribute('aria-expanded', String(!isCollapsed));
       localStorage.setItem('mosaic.mth1w.goalCollapsed.v1', isCollapsed ? '1' : '0');
     };
 
