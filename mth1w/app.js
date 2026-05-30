@@ -230,6 +230,7 @@
     const slots = state.sheets.questionColorSlots;
     const root = document.getElementById('app');
     setHTML(root, '');
+    const solved = (state.student.answers || []).filter(a => a && a.correct).length;
     // Top card: greeting + tile + Learning Goal accordion all in one composed surface.
     const goalCollapsed = localStorage.getItem('mosaic.mth1w.goalCollapsed.v1') === '1';
     const topCard = document.createElement('div');
