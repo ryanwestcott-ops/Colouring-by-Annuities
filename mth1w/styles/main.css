@@ -543,7 +543,13 @@ body { font-size: 15.5px; }
 .badge-id {
   font-size: 28px; font-weight: 700; line-height: 1;
   letter-spacing: -0.01em; z-index: 1;
-  font-family: inherit;   /* override the global Iowan Old Style */
+  /* Explicit sans, with !important since some legacy serif rules win the cascade. */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+.top-card .section-badge,
+.top-card .badge-eyebrow,
+.top-card .badge-id {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
 .student-meta { flex: 1; min-width: 0; }
