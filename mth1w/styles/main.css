@@ -129,12 +129,7 @@ code { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; fon
   display: flex; align-items: center; gap: 16px; padding: 16px 0; margin-bottom: 8px;
   border-bottom: 1px solid var(--line);
 }
-.section-badge {
-  background: var(--ink); color: white; font-family: "Iowan Old Style", Georgia, serif;
-  font-size: 28px; font-weight: 700; width: 72px; height: 72px;
-  border-radius: var(--radius); display: flex; align-items: center; justify-content: center;
-  border: 3px solid var(--gold);
-}
+/* Legacy .section-badge rule removed — replaced by the top-card squircle badge below. */
 .student-meta { flex: 1; }
 .student-meta h2 { margin: 0; }
 .student-meta .sub { color: var(--ink-soft); font-size: 13px; }
