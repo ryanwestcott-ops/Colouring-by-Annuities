@@ -162,7 +162,7 @@
     setHTML(ov,
       '<div class="mission-card">' +
         '<h1>Your mission</h1>' +
-        '<p>Solve your 12 questions on financial literacy and data management. Each correct answer fills tiles in your section. When every section is complete, the class reveals the giraffe.</p>' +
+        '<p>Solve 18 questions on financial literacy and data management. Each correct answer fills tiles in your section. When every section is complete, the class mosaic is revealed.</p>' +
         '<h3>How it works</h3>' +
         '<ul>' +
           '<li>Show your work in the textbox before each answer. This is part of your assessment.</li>' +
@@ -198,11 +198,11 @@
       '<div class="section-badge">' + escapeHtml(state.student.sheetId) + '</div>' +
       '<div class="student-meta">' +
         '<h2>' + escapeHtml(state.student.name) + '</h2>' +
-        '<div class="sub">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W MAP4C &middot; 12 questionsmiddot; 12 questions</div>' +
+        '<div class="sub">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W &middot; 18 questions</div>' +
         '<div style="margin-top:6px;display:flex;align-items:center;gap:12px;">' +
           '<div style="flex:1;">' +
-            '<div style="font-size:13px;color:var(--ink-soft);"><span><strong>Your questions:</strong> ' + solved + ' / 12</span> &nbsp;&middot;&nbsp; <span id="class-tiles-counter"><strong>Class tiles done:</strong> 0 / 16</span></div>' +
-            '<div class="progress-bar"><div style="width:' + ((solved/12)*100) + '%"></div></div>' +
+            '<div style="font-size:13px;color:var(--ink-soft);"><span><strong>Your questions:</strong> ' + solved + ' / 18</span> &nbsp;&middot;&nbsp; <span id="class-tiles-counter"><strong>Class tiles done:</strong> 0 / 16</span></div>' +
+            '<div class="progress-bar"><div style="width:' + ((solved/18)*100) + '%"></div></div>' +
           '</div>' +
           '<div class="hint-chip ' + (creditsLeft === 0 ? 'empty' : '') + '">' + creditsLeft + ' hint credits left</div>' +
         '</div>' +
@@ -243,7 +243,17 @@
     const gridWrap = document.createElement('div');
     gridWrap.className = 'grid-wrap';
     layout.appendChild(qList); layout.appendChild(gridWrap);
-    const DIVIDERS = { 0: 'Getting Started', 3: 'Present & Future Value', 6: 'Multi-Step Problems', 9: 'Challenge' };
+    // Section dividers — match the 18-slot lesson groupings
+    const DIVIDERS = {
+      0: 'Simple Interest (FL.L1)',
+      2: 'Compound Interest (FL.L2)',
+      4: 'Appreciation & Depreciation (FL.L3)',
+      7: 'Budgeting & Spending (FL.L4)',
+      10: 'Payment Options (FL.L5)',
+      12: 'Central Tendency (DM.L1)',
+      14: 'Spread (DM.L2)',
+      16: 'Scatter Plots (DM.L3)'
+    };
     sheet.questions.forEach((q, idx) => {
       if (DIVIDERS[idx]) {
         const d = document.createElement('div'); d.className = 'section-divider'; d.textContent = DIVIDERS[idx];
@@ -253,12 +263,12 @@
     });
 
     // Final reflection (renders after every question is solved)
-    if (solved === 12) {
+    if (solved === 18) {
       qList.appendChild(renderReflectionCard());
     }
 
     gridWrap.appendChild(renderMosaic(sheet, colors, slots));
-    if (solved === 12) {
+    if (solved === 18) {
       const banner = document.createElement('div'); banner.className = 'complete-banner';
       setHTML(banner, '<h2 style="color:white;">Section complete</h2><p>Nice work — scroll down to reflect on what you learned.</p>');
       gridWrap.appendChild(banner);
@@ -522,6 +532,41 @@
           fields: [
             { key: 'subtotal', label: 'Bill ($)', expected: p.subtotal },
             { key: 'pct', label: 'Tip %', expected: p.pct }
+          ] };
+      case 'fl_linear_appreciation':
+        return { formula: 'V = V₀ + d · t', intro: 'Linear growth — add a fixed dollar amount each year.',
+          fields: [
+            { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
+            { key: 'd', label: 'd (increase per year, $)', expected: p.d },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'fl_linear_depreciation':
+        return { formula: 'V = V₀ − d · t', intro: 'Linear shrinkage — subtract a fixed dollar amount each year.',
+          fields: [
+            { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
+            { key: 'd', label: 'd (decrease per year, $)', expected: p.d },
+            { key: 't', label: 't (years)', expected: p.t }
+          ] };
+      case 'fl_compare_options':
+        return { formula: 'Difference = Option B total − Option A total', intro: 'Find each total cost first, then subtract.',
+          fields: [
+            { key: 'A_total', label: 'Option A total ($)', expected: p.cash_price, hint: 'Cash price upfront' },
+            { key: 'B_total', label: 'Option B total ($)', expected: p.total_b, hint: 'Monthly × months' }
+          ] };
+      case 'dm_quartile': {
+        const which = p.which || 'Q1';
+        return { formula: which + ' = median of the ' + (which === 'Q1' ? 'lower' : 'upper') + ' half', intro: 'Sort the data, split into halves, find the median of the requested half.',
+          fields: [
+            { key: 'q1', label: 'Q1 (median of lower half)', expected: p.q1 },
+            { key: 'q3', label: 'Q3 (median of upper half)', expected: p.q3 }
+          ] };
+      }
+      case 'dm_scatter_from_points':
+        return { formula: 'm = Δy/Δx, then b = y₁ − m·x₁, then y = m·x + b', intro: 'Use the two points on the line to find slope and intercept, then predict.',
+          fields: [
+            { key: 'm', label: 'm (slope)', expected: p.m },
+            { key: 'b', label: 'b (y-intercept)', expected: p.b },
+            { key: 'x', label: 'x (value to predict at)', expected: p.x }
           ] };
     }
     return null;
@@ -931,7 +976,7 @@
         // mini 10x10 grid
         const mini = document.createElement('div');
         mini.className = 'cm-mini';
-        const sectionSolved = cmSnap.solved[sid] || new Array(12).fill(false);
+        const sectionSolved = cmSnap.solved[sid] || new Array(18).fill(false);
         const released = !!(cmSnap.released && cmSnap.released[sid]);
         const grid = allSheets[sid].grid;
         // For my own section, also use my live answers (so I see my piece fill immediately)
@@ -965,7 +1010,7 @@
     Object.keys(state.sheets.sheets).forEach(sid => {
       const released = !!(cmSnap.released && cmSnap.released[sid]);
       const solved = (cmSnap.solved && cmSnap.solved[sid]) || [];
-      if (released || (solved.length === 12 && solved.every(Boolean))) done++;
+      if (released || (solved.length === 18 && solved.every(Boolean))) done++;
     });
     setHTML(counter, '<strong>Class tiles done:</strong> ' + done + ' / 16');
   }
@@ -1078,7 +1123,7 @@
       snap.students.forEach(s => { studentCount[s.section] = (studentCount[s.section] || 0) + 1; });
       state.sheets.layout.flat().forEach(sid => {
         const sec = document.createElement('div'); sec.className = 'sec';
-        const solvedBitmap = cm.solved[sid] || new Array(12).fill(false);
+        const solvedBitmap = cm.solved[sid] || new Array(18).fill(false);
         const numSolved = solvedBitmap.filter(Boolean).length;
         const released = !!(cm.released && cm.released[sid]);
         const pct = Math.round((numSolved / 12) * 100);
