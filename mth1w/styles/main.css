@@ -678,6 +678,80 @@ body {
 .mosaic-tile.is-revealed .tile-inner { transform: rotateY(180deg); }
 .mosaic-tile.no-animate .tile-inner { transition: none; }
 
+/* ── Status panel that sits under the mosaic + travels with it ──────── */
+.status-panel {
+  padding: 14px 16px !important;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+.status-row { margin: 0 0 10px; }
+.status-row:last-child { margin-bottom: 0; }
+.status-line {
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-size: 12px; color: var(--ink-soft); margin-bottom: 4px;
+}
+.status-line-label {
+  font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.status-line-val {
+  font-variant-numeric: tabular-nums; font-weight: 700;
+  font-size: 13px; color: #1d1d1f;
+}
+.status-bar {
+  height: 6px; background: #E5E5EA; border-radius: 3px; overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+}
+.status-bar > div {
+  height: 100%; background: var(--accent); transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.status-bar > div.status-class-fill {
+  background: linear-gradient(90deg, var(--accent) 0%, #4cc66a 100%);
+}
+.status-sub {
+  font-size: 11.5px; color: var(--ink-soft);
+  margin-top: 3px; text-align: right;
+}
+.status-credits {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  background: var(--gold-soft); border-radius: 8px;
+  border: 1px solid rgba(200,158,96,0.4);
+  margin-top: 12px;
+}
+.status-credits.empty {
+  background: var(--warn-soft); border-color: var(--warn);
+}
+.credits-icon { font-size: 16px; }
+.credits-text { font-size: 13px; color: #6b4d12; }
+.credits-text strong { font-variant-numeric: tabular-nums; }
+.status-credits.empty .credits-text { color: var(--warn); }
+
+/* Sticky right column carries both mosaic-card and status-panel */
+.grid-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+/* ── Improved hint pill buttons (cost is now subscript-style) ──────── */
+.hint-btn .hint-btn-label { display: inline-block; }
+.hint-btn .hint-btn-cost {
+  display: inline-block; margin-left: 5px;
+  font-size: 9.5px; padding: 1px 5px; border-radius: 5px;
+  background: rgba(0,0,0,0.08);
+  font-weight: 700; opacity: 0.7; vertical-align: 1px;
+}
+.hint-btn.is-loading {
+  position: relative; color: transparent !important;
+}
+.hint-btn.is-loading::before {
+  content: ''; position: absolute;
+  width: 12px; height: 12px;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border: 2px solid rgba(0,0,0,0.15);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+.hint-btn.is-loading .hint-btn-cost { display: none; }
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
 /* ── Class-mosaic view: 4x4 of mini grids ────────────────────────────── */
 .stage-class .class-mosaic-wrap { background: #E5E5EA; }
 .cm-section.mine { outline-color: #FF9F0A; box-shadow: 0 0 0 2px rgba(255,159,10,0.3), 0 6px 14px rgba(255,159,10,0.3); }

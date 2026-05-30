@@ -238,13 +238,6 @@
       '<div class="student-meta">' +
         '<h2>' + escapeHtml(state.student.name) + '</h2>' +
         '<div class="sub">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W &middot; 18 questions</div>' +
-        '<div style="margin-top:6px;display:flex;align-items:center;gap:12px;">' +
-          '<div style="flex:1;">' +
-            '<div style="font-size:13px;color:var(--ink-soft);"><span><strong>Your questions:</strong> ' + solved + ' / 18</span> &nbsp;&middot;&nbsp; <span id="class-tiles-counter"><strong>Class tiles done:</strong> 0 / 16</span></div>' +
-            '<div class="progress-bar"><div style="width:' + ((solved/18)*100) + '%"></div></div>' +
-          '</div>' +
-          '<div class="hint-chip ' + (creditsLeft === 0 ? 'empty' : '') + '">' + creditsLeft + ' hint credits left</div>' +
-        '</div>' +
       '</div>');
     root.appendChild(header);
 
@@ -307,6 +300,7 @@
     }
 
     gridWrap.appendChild(renderMosaic(sheet, colors, slots));
+    gridWrap.appendChild(renderStatusPanel());
     if (solved === 18) {
       const banner = document.createElement('div'); banner.className = 'complete-banner';
       setHTML(banner, '<h2 style="color:white;">Section complete</h2><p>Nice work — scroll down to reflect on what you learned.</p>');
@@ -977,16 +971,21 @@
     const budget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
     const spent = state.student.hintCreditsSpent || 0;
     const left = budget - spent;
-    const labels = ['Small hint', 'Bigger hint', 'Show formula'];
-    let html = '<span style="font-size:13px;color:var(--ink-soft);margin-right:6px;">Stuck?</span>';
+    const labels = ['Small hint', 'Bigger hint', 'Worked example'];
+    let html = '';
     for (let L = 1; L <= 3; L++) {
       const cost = L === 1 ? 0 : (L === 2 ? 1 : 2);
       const disabled = L <= level || (cost > 0 && left < cost);
-      html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" ' + (disabled ? 'disabled' : '') + '>' + labels[L-1] + '</button> ';
+      const costLabel = cost === 0 ? 'free' : (cost === 1 ? '1 credit' : '2 credits');
+      html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" data-cost="' + cost + '" ' +
+              (disabled ? 'disabled' : '') + ' title="' + costLabel + '">' +
+              '<span class="hint-btn-label">' + labels[L-1] + '</span>' +
+              (cost > 0 ? '<span class="hint-btn-cost">' + cost + 'c</span>' : '') +
+              '</button> ';
     }
     setHTML(wrap, html);
     wrap.querySelectorAll('.hint-btn').forEach(b => {
-      b.onclick = (e) => useHint(parseInt(b.getAttribute('data-idx'), 10), parseInt(b.getAttribute('data-level'), 10));
+      b.onclick = function () { useHint(parseInt(b.getAttribute('data-idx'), 10), parseInt(b.getAttribute('data-level'), 10), b); };
     });
     const hintCardEl = root.querySelector('#hint-card-' + idx);
     if (current && current.html && hintCardEl) {
@@ -995,19 +994,96 @@
     }
   }
 
-  async function useHint(idx, level) {
+  async function useHint(idx, level, btn) {
+    const cost = level === 1 ? 0 : (level === 2 ? 1 : 2);
+    const budget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
+    const left = budget - (state.student.hintCreditsSpent || 0);
+
+    // Paid hints require explicit confirmation
+    if (cost > 0) {
+      const remaining = left - cost;
+      const ok = confirm(
+        'Use ' + cost + ' hint credit' + (cost === 1 ? '' : 's') + ' for this hint?\n\n' +
+        'You will have ' + remaining + ' / ' + budget + ' credit' + (remaining === 1 ? '' : 's') + ' left.'
+      );
+      if (!ok) return;
+    }
+
+    // Spinner state on the button until the response returns
+    let origLabel = null;
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('is-loading');
+      origLabel = btn.querySelector('.hint-btn-label');
+      if (origLabel) origLabel.dataset.orig = origLabel.textContent;
+    }
     try {
       const r = await API.useHint(state.student.number, idx, level);
-      if (!r.ok) { toast(r.error === 'out_of_credits' ? 'Out of hint credits.' : ('Hint failed: ' + r.error), 'warn'); return; }
+      if (!r.ok) {
+        toast(r.error === 'out_of_credits' ? 'Out of hint credits.' : ('Hint failed: ' + r.error), 'warn');
+        if (btn) { btn.disabled = false; btn.classList.remove('is-loading'); }
+        return;
+      }
       state.student.hints[idx] = { level: r.newLevel, html: r.hintHtml };
       state.student.hintCreditsSpent = r.hintCreditsSpent;
       render();
-    } catch (err) { toast('Could not reach server.', 'warn'); }
+    } catch (err) {
+      toast('Could not reach server.', 'warn');
+      if (btn) { btn.disabled = false; btn.classList.remove('is-loading'); }
+    }
   }
 
   // Class-wide mosaic. Renders all 16 sections (40x40 cells) using the live
   // classMosaic API snapshot (which slots have been solved by ANY student in each
   // section, plus teacher-released sections).
+  // Compact status panel that sits under the mosaic and travels with it (sticky).
+  // Contains: my progress, class tiles count, class progress bar, hint credits.
+  function renderStatusPanel() {
+    const card = document.createElement('div');
+    card.className = 'card status-panel';
+    card.id = 'status-panel';
+    drawStatusPanel(card);
+    return card;
+  }
+
+  function drawStatusPanel(card) {
+    const solved = (state.student.answers || []).filter(a => a && a.correct).length;
+    const hintBudget = (state.config && state.config.hintBudget) || state.sheets.hintBudget || 5;
+    const creditsSpent = state.student.hintCreditsSpent || 0;
+    const creditsLeft = Math.max(hintBudget - creditsSpent, 0);
+    const cp = computeClassProgress();
+    const cmSnap = state.classMosaic || { solved: {}, released: {} };
+    let tilesDone = 0;
+    Object.keys(state.sheets.sheets).forEach(sid => {
+      const released = !!(cmSnap.released && cmSnap.released[sid]);
+      const arr = (cmSnap.solved && cmSnap.solved[sid]) || [];
+      if (released || (arr.length === 18 && arr.every(Boolean))) tilesDone++;
+    });
+    setHTML(card,
+      '<div class="status-row">' +
+        '<div class="status-line"><span class="status-line-label">Your questions</span>' +
+          '<span class="status-line-val">' + solved + ' / 18</span></div>' +
+        '<div class="progress-bar status-bar"><div style="width:' + ((solved/18)*100) + '%"></div></div>' +
+      '</div>' +
+      '<div class="status-row">' +
+        '<div class="status-line"><span class="status-line-label">Class progress</span>' +
+          '<span class="status-line-val">' + cp.percent + '%</span></div>' +
+        '<div class="progress-bar status-bar"><div class="status-class-fill" style="width:' + cp.percent + '%"></div></div>' +
+        '<div class="status-sub">' + tilesDone + ' / 16 tiles complete</div>' +
+      '</div>' +
+      '<div class="status-row status-credits ' + (creditsLeft === 0 ? 'empty' : '') + '">' +
+        '<span class="credits-icon">💡</span>' +
+        '<span class="credits-text"><strong>' + creditsLeft + '</strong> of ' + hintBudget + ' hint credit' + (hintBudget === 1 ? '' : 's') + ' left</span>' +
+      '</div>'
+    );
+  }
+
+  // Called by the class-mosaic poller to refresh the panel in place.
+  function refreshStatusPanel() {
+    const card = document.getElementById('status-panel');
+    if (card) drawStatusPanel(card);
+  }
+
   function renderMosaic(sheet, colors, slots) {
     const card = document.createElement('div');
     card.className = 'card mosaic-card';
@@ -1082,18 +1158,8 @@
     wrap.className = 'my-tile-wrap';
     const header = document.createElement('div');
     header.className = 'my-tile-header';
-    const solvedCount = liveSolved.filter(Boolean).length;
-    const cp = computeClassProgress(cmSnap);
     setHTML(header,
-      '<div class="my-tile-line-1">' +
-        '<span class="my-tile-label">Your section: <strong>' + escapeHtml(sid) + '</strong></span>' +
-        '<span class="my-tile-progress">' + solvedCount + ' / 18</span>' +
-      '</div>' +
-      '<div class="my-tile-line-2">' +
-        '<span class="class-progress-label">Class progress</span>' +
-        '<div class="class-progress-bar"><div class="class-progress-fill" style="width:' + cp.percent + '%"></div></div>' +
-        '<span class="class-progress-pct">' + cp.percent + '%</span>' +
-      '</div>'
+      '<span class="my-tile-label">Your section: <strong>' + escapeHtml(sid) + '</strong></span>'
     );
     wrap.appendChild(header);
     const grid = document.createElement('div'); grid.className = 'mosaic-grid';
@@ -1196,7 +1262,7 @@
         wrap.appendChild(sectionEl);
       }
     }
-    updateClassTilesCounter(cmSnap);
+    refreshStatusPanel();
   }
 
   // Aggregate class progress: % of (16 sections * 18 slots = 288) total slots solved.
@@ -1233,7 +1299,7 @@
         // Update whichever mosaic view is currently visible
         const stage = document.getElementById('mosaic-stage');
         if (stage) drawMosaicStage(stage, state.mosaicMode || 'mine');
-        updateClassTilesCounter(r);
+        refreshStatusPanel();
       }
     } catch (_) {}
   }
