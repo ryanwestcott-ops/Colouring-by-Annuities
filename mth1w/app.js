@@ -422,7 +422,7 @@
         '<div id="hint-card-' + idx + '"></div>' +
         renderShowYourWorkHTML(q, idx) +
         '<div class="answer-row">' +
-          '<div class="dollar-input"><input type="number" step="0.01" inputmode="decimal" id="ans-' + idx + '" placeholder="My answer"></div>' +
+          '<div class="dollar-input"><input type="text" inputmode="decimal" autocomplete="off" id="ans-' + idx + '" placeholder="My answer"></div>' +
           '<button class="primary" id="submit-' + idx + '">Submit answer</button>' +
         '</div>' +
         '<div id="feedback-' + idx + '">' + fbHtml + '</div>';
