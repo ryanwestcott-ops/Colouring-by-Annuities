@@ -14,9 +14,12 @@
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   }
-  // Render question text: escape HTML, then render **bold** + $math$ via KaTeX.
+  // Render question text: escape HTML, then render **bold** as <strong>.
+  // IMPORTANT: do NOT run KaTeX here — question text contains plain dollar amounts
+  // ("$3,500", "$1,233") which would otherwise be eaten by the $...$ math regex.
+  // Math only goes in formula cards and hint cards, which call renderMath explicitly.
   function renderQuestionText(s) {
-    return renderMath(escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'));
+    return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   }
   // Replace any $...$ in an HTML string with rendered KaTeX. Falls back to raw if not loaded.
   function renderMath(html) {
@@ -234,10 +237,13 @@
     const creditsSpent = state.student.hintCreditsSpent || 0;
     const creditsLeft = Math.max(hintBudget - creditsSpent, 0);
     setHTML(header,
-      '<div class="section-badge">' + escapeHtml(state.student.sheetId) + '</div>' +
+      '<div class="section-badge"><span class="badge-eyebrow">YOUR TILE</span><span class="badge-id">' + escapeHtml(state.student.sheetId) + '</span></div>' +
       '<div class="student-meta">' +
-        '<h2>' + escapeHtml(state.student.name) + '</h2>' +
-        '<div class="sub">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W &middot; 18 questions</div>' +
+        '<h2>Hey ' + escapeHtml(state.student.name) + ' 👋</h2>' +
+        '<div class="sub student-tagline">' +
+          'Solve your <strong>18 questions</strong> to colour in tile <strong>' + escapeHtml(state.student.sheetId) + '</strong> of the class mosaic.' +
+        '</div>' +
+        '<div class="sub" style="margin-top:2px;">Student #' + escapeHtml(state.student.number) + ' · MTH1W' + '</div>' +
       '</div>');
     root.appendChild(header);
 
@@ -438,14 +444,14 @@
     const p = q.params || {};
     switch (q.type) {
       case 'simple_interest_find_I':
-        return { formula: '$I = P \\cdot r \\cdot t$', intro: 'Find each known value, write the rate as a decimal, then multiply.',
+        return { formula: '$I = Prt$', intro: 'Find each known value, write the rate as a decimal, then multiply.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r', label: 'r (rate as decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'simple_interest_find_P':
-        return { formula: '$P = \\dfrac{I}{r \\cdot t}$', intro: 'Rearrange I = P × r × t to solve for P.',
+        return { formula: '$P = \\dfrac{I}{rt}$', intro: 'Rearrange I = P × r × t to solve for P.',
           fields: [
             { key: 'I', label: 'I (interest earned, $)', expected: p.I },
             { key: 'r', label: 'r (decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
@@ -459,7 +465,7 @@
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'compound_periodic':
-        return { formula: '$A = P\\left(1 + \\dfrac{r}{n}\\right)^{n \\cdot t}$', intro: 'r is the ANNUAL rate. n = times per year it compounds.',
+        return { formula: '$A = P\\left(1 + \\dfrac{r}{n}\\right)^{nt}$', intro: 'r is the ANNUAL rate. n = times per year it compounds.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r', label: 'r (annual decimal)', expected: p.r/100 },
@@ -493,7 +499,7 @@
             { key: 'income', label: 'Total income ($)', expected: p.income }
           ] };
       case 'loan_payment':
-        return { formula: '$A = P \\cdot \\dfrac{r(1+r)^{n}}{(1+r)^{n} - 1}$', intro: 'r is the MONTHLY rate, n is total months.',
+        return { formula: '$A = P\\,\\dfrac{r(1+r)^{n}}{(1+r)^{n} - 1}$', intro: 'r is the MONTHLY rate, n is total months.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r_monthly', label: 'r (monthly decimal)', expected: p.r_annual/100/12, hint: 'Annual % ÷ 100 ÷ 12' },
@@ -543,7 +549,7 @@
             { key: 'q3', label: 'Q3 (upper-half median)', expected: p.q3 }
           ] };
       case 'dm_prediction':
-        return { formula: '$y = m \\cdot x + b$', intro: 'Substitute the given x into the line equation.',
+        return { formula: '$y = mx + b$', intro: 'Substitute the given x into the line equation.',
           fields: [
             { key: 'm', label: 'm (slope)', expected: p.m },
             { key: 'x', label: 'x (value to predict at)', expected: p.x },
@@ -568,14 +574,14 @@
             { key: 'pct', label: 'Tip %', expected: p.pct }
           ] };
       case 'fl_linear_appreciation':
-        return { formula: '$V = V_{0} + d \\cdot t$', intro: 'Linear growth — add a fixed dollar amount each year.',
+        return { formula: '$V = V_{0} + dt$', intro: 'Linear growth — add a fixed dollar amount each year.',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'd', label: 'd (increase per year, $)', expected: p.d },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'fl_linear_depreciation':
-        return { formula: '$V = V_{0} - d \\cdot t$', intro: 'Linear shrinkage — subtract a fixed dollar amount each year.',
+        return { formula: '$V = V_{0} - dt$', intro: 'Linear shrinkage — subtract a fixed dollar amount each year.',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'd', label: 'd (decrease per year, $)', expected: p.d },
@@ -976,11 +982,10 @@
     for (let L = 1; L <= 3; L++) {
       const cost = L === 1 ? 0 : (L === 2 ? 1 : 2);
       const disabled = L <= level || (cost > 0 && left < cost);
-      const costLabel = cost === 0 ? 'free' : (cost === 1 ? '1 credit' : '2 credits');
+      const tip = cost === 0 ? 'Free' : ('Uses ' + cost + ' hint credit' + (cost === 1 ? '' : 's'));
       html += '<button class="hint-btn" data-idx="' + idx + '" data-level="' + L + '" data-cost="' + cost + '" ' +
-              (disabled ? 'disabled' : '') + ' title="' + costLabel + '">' +
+              (disabled ? 'disabled' : '') + ' title="' + tip + '">' +
               '<span class="hint-btn-label">' + labels[L-1] + '</span>' +
-              (cost > 0 ? '<span class="hint-btn-cost">' + cost + 'c</span>' : '') +
               '</button> ';
     }
     setHTML(wrap, html);
@@ -1098,21 +1103,10 @@
         '</div>' +
         '<button class="mosaic-fullscreen" id="mosaic-fs" title="Fullscreen">⛶</button>' +
       '</div>' +
-      '<div class="mosaic-stage" id="mosaic-stage"></div>' +
-      '<div class="mosaic-legend-wrap" id="mosaic-legend"></div>'
+      '<div class="mosaic-stage" id="mosaic-stage"></div>'
     );
     drawMosaicStage(card.querySelector('#mosaic-stage'), mode);
-    // Legend
-    const legend = card.querySelector('#mosaic-legend');
-    const legendInner = document.createElement('div'); legendInner.className = 'legend';
-    Object.keys(colors).forEach(key => {
-      const c = colors[key];
-      const item = document.createElement('div'); item.className = 'item';
-      const sw = document.createElement('span'); sw.className = 'swatch'; sw.style.background = c.hex;
-      const lbl = document.createElement('span'); lbl.textContent = c.label;
-      item.appendChild(sw); item.appendChild(lbl); legendInner.appendChild(item);
-    });
-    legend.appendChild(legendInner);
+    // (Colour legend intentionally omitted — students don't need it; cells auto-fill.)
     // Tab handlers
     card.querySelectorAll('.mosaic-tab').forEach(btn => {
       btn.onclick = () => {
