@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MTH1W — Financial Literacy + Data Mosaic</title>
-  <link rel="stylesheet" href="styles/main.css">
+  <!-- BUILD: bumps the ?v= on every deploy so CDN/browser cache doesn't serve stale CSS/JS.
+       The build hash is set in app.js too and used to compose query params. -->
+  <link rel="stylesheet" href="styles/main.css?v=20260530c">
   <!-- KaTeX for pretty math typesetting (synchronous, no layout shift) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
@@ -23,8 +25,8 @@
   <div id="app" class="page"></div>
   <div id="toast-container"></div>
 
-  <script src="config.js"></script>
-  <script src="api.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js?v=20260530c"></script>
+  <script src="api.js?v=20260530c"></script>
+  <script src="app.js?v=20260530c"></script>
 </body>
 </html>
