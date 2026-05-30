@@ -612,6 +612,90 @@ body { font-size: 15.5px; }
   max-height: 0; opacity: 0; padding-top: 0;
 }
 
+/* ── Gemini-style refresh: 3-column top card (badge | meta | hero art) ─ */
+/* Padding shrinks on the right so the hero art can bleed to the card edge. */
+.top-card {
+  padding: 18px 0 18px 22px;
+  overflow: hidden;
+}
+.top-card-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) clamp(220px, 34%, 340px);
+  align-items: stretch;
+  gap: 22px;
+}
+.top-card .student-meta { align-self: center; }
+
+/* Gold ring around the squircle tile to match the Gemini reference. */
+.top-card .section-badge {
+  border: 3px solid var(--gold);
+  box-shadow:
+    0 10px 24px -8px rgba(30, 50, 100, 0.45),
+    inset 0 -2px 0 rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 0 0 4px rgba(200, 158, 96, 0.18);
+  align-self: center;
+}
+.top-card .section-badge::after {
+  /* Inner radius shrinks slightly to sit cleanly inside the gold border. */
+  border-radius: 19px;
+}
+
+/* Hero-art banner — math-themed SVG flush to the right edge of the card. */
+.hero-art {
+  align-self: stretch;
+  min-height: 120px;
+  margin: -18px 0 -18px 0;
+  border-radius: 0 16px 16px 0;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5efe2 0%, #ffffff 100%);
+  display: flex; align-items: stretch;
+  border-left: 1px solid #F0F0F2;
+}
+.hero-art svg { width: 100%; height: 100%; display: block; }
+
+/* On narrow screens, drop the banner column and pad both sides evenly. */
+@media (max-width: 760px) {
+  .top-card { padding: 18px 22px; }
+  .top-card-main { grid-template-columns: auto minmax(0, 1fr); }
+  .hero-art { display: none; }
+}
+
+/* Learning Goal — its own card directly below the top card. */
+.goal-card-v2 {
+  background: #FFFFFF;
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px -8px rgba(0,0,0,0.08);
+}
+.goal-card-v2 .goal-toggle {
+  width: 100%;
+  background: transparent; border: none;
+  display: flex; align-items: center; gap: 10px;
+  font: inherit; font-size: 14px; color: #1d1d1f;
+  padding: 4px 0; cursor: pointer; text-align: left;
+}
+.goal-card-v2 .goal-toggle:hover { color: var(--accent); background: transparent; border-color: transparent; }
+.goal-card-v2 .goal-arrow {
+  font-size: 18px; color: #8E8E93; line-height: 1;
+  transition: transform 0.2s;
+}
+.goal-card-v2.is-collapsed .goal-arrow { transform: rotate(-90deg); }
+.goal-card-v2 .goal-body {
+  font-size: 13.5px; color: #1d1d1f; line-height: 1.55;
+  padding-top: 10px;
+  max-height: 400px; opacity: 1;
+  transition: max-height 0.25s ease, opacity 0.2s, padding-top 0.2s;
+  overflow: hidden;
+}
+.goal-card-v2 .goal-body p { margin: 0 0 6px; }
+.goal-card-v2 .goal-body ul { margin: 4px 0 0; padding-left: 22px; }
+.goal-card-v2 .goal-body li { margin: 3px 0; }
+.goal-card-v2.is-collapsed .goal-body {
+  max-height: 0; opacity: 0; padding-top: 0;
+}
+
 /* ── Palette refresh: cool gray background, pure white cards ─────────── */
 body {
   background: #F5F5F7;

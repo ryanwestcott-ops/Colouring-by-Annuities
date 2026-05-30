@@ -231,10 +231,9 @@
     const root = document.getElementById('app');
     setHTML(root, '');
     const solved = (state.student.answers || []).filter(a => a && a.correct).length;
-    // Top card: greeting + tile + Learning Goal accordion all in one composed surface.
-    const goalCollapsed = localStorage.getItem('mosaic.mth1w.goalCollapsed.v1') === '1';
+    // Top card: greeting + tile + decorative math-themed banner art on the right.
     const topCard = document.createElement('div');
-    topCard.className = 'top-card' + (goalCollapsed ? ' goal-collapsed' : '');
+    topCard.className = 'top-card';
     setHTML(topCard,
       '<div class="top-card-main">' +
         '<div class="section-badge"><span class="badge-eyebrow">YOUR TILE</span><span class="badge-id">' + escapeHtml(state.student.sheetId) + '</span></div>' +
@@ -245,10 +244,19 @@
           '</p>' +
           '<p class="meta-line">Student #' + escapeHtml(state.student.number) + ' &middot; MTH1W</p>' +
         '</div>' +
-      '</div>' +
+        '<div class="hero-art" aria-hidden="true">' + heroArtSVG() + '</div>' +
+      '</div>'
+    );
+    root.appendChild(topCard);
+
+    // Learning Goal — its own card below the top card.
+    const goalCollapsed = localStorage.getItem('mosaic.mth1w.goalCollapsed.v1') === '1';
+    const goal = document.createElement('div');
+    goal.className = 'goal-card-v2' + (goalCollapsed ? ' is-collapsed' : '');
+    setHTML(goal,
       '<button class="goal-toggle" id="goal-toggle" type="button" aria-expanded="' + (goalCollapsed ? 'false' : 'true') + '">' +
-        '<span><strong>Learning goal &amp; success criteria</strong></span>' +
         '<span class="goal-arrow" aria-hidden="true">' + (goalCollapsed ? '›' : '⌄') + '</span>' +
+        '<span><strong>Learning goal &amp; success criteria</strong></span>' +
       '</button>' +
       '<div class="goal-body">' +
         '<p><strong>Learning Goal:</strong> I can solve financial literacy and data problems by choosing the correct formula, substituting values, and explaining my reasoning.</p>' +
@@ -261,11 +269,11 @@
         '</ul>' +
       '</div>'
     );
-    root.appendChild(topCard);
-    topCard.querySelector('#goal-toggle').onclick = () => {
-      const isCollapsed = topCard.classList.toggle('goal-collapsed');
-      topCard.querySelector('.goal-arrow').textContent = isCollapsed ? '›' : '⌄';
-      topCard.querySelector('#goal-toggle').setAttribute('aria-expanded', String(!isCollapsed));
+    root.appendChild(goal);
+    goal.querySelector('#goal-toggle').onclick = () => {
+      const isCollapsed = goal.classList.toggle('is-collapsed');
+      goal.querySelector('.goal-arrow').textContent = isCollapsed ? '›' : '⌄';
+      goal.querySelector('#goal-toggle').setAttribute('aria-expanded', String(!isCollapsed));
       localStorage.setItem('mosaic.mth1w.goalCollapsed.v1', isCollapsed ? '1' : '0');
     };
 
@@ -1082,6 +1090,91 @@
   function refreshStatusPanel() {
     const card = document.getElementById('status-panel');
     if (card) drawStatusPanel(card);
+  }
+
+  // Decorative banner art on the right side of the top card.
+  // Themed around the unit content: math symbols, a small bar chart, a scatter trend,
+  // a coin, and a fragment of the colourful mosaic on the right edge.
+  // Pure inline SVG — no external image fetch, no flicker, scales with parent.
+  function heroArtSVG() {
+    const palette = {
+      navy: '#1d2533', deepblue: '#2a3a5c', steel: '#4a6580',
+      sky: '#5bc0eb', gold: '#c89e60', gold2: '#e6c787',
+      cream: '#f5efe2', teal: '#3aa17a', mist: '#dfe6ed'
+    };
+    return (
+      '<svg viewBox="0 0 360 130" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" role="presentation" focusable="false">' +
+        '<defs>' +
+          '<linearGradient id="bgwash" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="' + palette.cream + '"/>' +
+            '<stop offset="100%" stop-color="#ffffff"/>' +
+          '</linearGradient>' +
+          '<linearGradient id="goldGr" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="' + palette.gold2 + '"/>' +
+            '<stop offset="100%" stop-color="' + palette.gold + '"/>' +
+          '</linearGradient>' +
+        '</defs>' +
+        '<rect width="360" height="130" fill="url(#bgwash)"/>' +
+
+        // ---- left half: math symbols + chart + scatter ----
+        // Sigma + x-bar
+        '<text x="14" y="38" font-family="Georgia, serif" font-size="22" fill="' + palette.steel + '" font-style="italic">Σ</text>' +
+        '<text x="40" y="42" font-family="Georgia, serif" font-size="14" fill="' + palette.steel + '" font-style="italic">x&#x0305;</text>' +
+
+        // Small bar chart
+        '<g transform="translate(70,60)">' +
+          '<rect x="0"  y="28" width="9" height="22" rx="1.5" fill="' + palette.gold + '"/>' +
+          '<rect x="13" y="14" width="9" height="36" rx="1.5" fill="' + palette.deepblue + '"/>' +
+          '<rect x="26" y="6"  width="9" height="44" rx="1.5" fill="' + palette.sky + '"/>' +
+          '<rect x="39" y="20" width="9" height="30" rx="1.5" fill="' + palette.teal + '"/>' +
+          '<line x1="-2" y1="51" x2="52" y2="51" stroke="' + palette.steel + '" stroke-width="1" stroke-linecap="round"/>' +
+        '</g>' +
+
+        // Scatter / line of best fit
+        '<g transform="translate(130,30)" fill="' + palette.deepblue + '">' +
+          '<circle cx="0"  cy="40" r="2.5"/>' +
+          '<circle cx="14" cy="32" r="2.5"/>' +
+          '<circle cx="28" cy="36" r="2.5"/>' +
+          '<circle cx="42" cy="22" r="2.5"/>' +
+          '<circle cx="56" cy="14" r="2.5"/>' +
+          '<circle cx="70" cy="18" r="2.5"/>' +
+          '<line x1="-4" y1="44" x2="76" y2="10" stroke="' + palette.gold + '" stroke-width="1.5" stroke-linecap="round"/>' +
+        '</g>' +
+
+        // Magnifier
+        '<g transform="translate(220,30)">' +
+          '<circle cx="14" cy="14" r="13" fill="none" stroke="' + palette.steel + '" stroke-width="2"/>' +
+          '<line x1="23" y1="23" x2="32" y2="32" stroke="' + palette.steel + '" stroke-width="2.5" stroke-linecap="round"/>' +
+          '<text x="14" y="19" font-family="Georgia, serif" font-size="11" fill="' + palette.gold + '" text-anchor="middle" font-weight="bold">$</text>' +
+        '</g>' +
+
+        // ---- right edge: tilted mosaic fragment ----
+        '<g transform="translate(270,-12) rotate(12)">' +
+          '<rect x="0"  y="0"  width="22" height="22" rx="4" fill="' + palette.gold + '"/>' +
+          '<rect x="26" y="0"  width="22" height="22" rx="4" fill="' + palette.deepblue + '"/>' +
+          '<rect x="52" y="0"  width="22" height="22" rx="4" fill="' + palette.sky + '"/>' +
+          '<rect x="78" y="0"  width="22" height="22" rx="4" fill="' + palette.mist + '"/>' +
+
+          '<rect x="0"  y="26" width="22" height="22" rx="4" fill="' + palette.deepblue + '"/>' +
+          '<rect x="26" y="26" width="22" height="22" rx="4" fill="' + palette.gold2 + '"/>' +
+          '<rect x="52" y="26" width="22" height="22" rx="4" fill="' + palette.steel + '"/>' +
+          '<rect x="78" y="26" width="22" height="22" rx="4" fill="' + palette.sky + '"/>' +
+
+          '<rect x="0"  y="52" width="22" height="22" rx="4" fill="' + palette.mist + '"/>' +
+          '<rect x="26" y="52" width="22" height="22" rx="4" fill="' + palette.deepblue + '"/>' +
+          '<rect x="52" y="52" width="22" height="22" rx="4" fill="' + palette.gold + '"/>' +
+          '<rect x="78" y="52" width="22" height="22" rx="4" fill="' + palette.teal + '"/>' +
+
+          '<rect x="0"  y="78" width="22" height="22" rx="4" fill="' + palette.deepblue + '"/>' +
+          '<rect x="26" y="78" width="22" height="22" rx="4" fill="' + palette.mist + '"/>' +
+          '<rect x="52" y="78" width="22" height="22" rx="4" fill="' + palette.deepblue + '"/>' +
+          '<rect x="78" y="78" width="22" height="22" rx="4" fill="url(#goldGr)"/>' +
+
+          // Subtle highlight on one tile
+          '<rect x="78" y="78" width="22" height="22" rx="4" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>' +
+        '</g>' +
+      '</svg>'
+    );
   }
 
   function renderMosaic(sheet, colors, slots) {
