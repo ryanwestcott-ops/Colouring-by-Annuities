@@ -1083,8 +1083,18 @@
     const header = document.createElement('div');
     header.className = 'my-tile-header';
     const solvedCount = liveSolved.filter(Boolean).length;
-    setHTML(header, '<span class="my-tile-label">Your section: <strong>' + escapeHtml(sid) + '</strong></span>' +
-                    '<span class="my-tile-progress">' + solvedCount + ' / 18 questions</span>');
+    const cp = computeClassProgress(cmSnap);
+    setHTML(header,
+      '<div class="my-tile-line-1">' +
+        '<span class="my-tile-label">Your section: <strong>' + escapeHtml(sid) + '</strong></span>' +
+        '<span class="my-tile-progress">' + solvedCount + ' / 18</span>' +
+      '</div>' +
+      '<div class="my-tile-line-2">' +
+        '<span class="class-progress-label">Class progress</span>' +
+        '<div class="class-progress-bar"><div class="class-progress-fill" style="width:' + cp.percent + '%"></div></div>' +
+        '<span class="class-progress-pct">' + cp.percent + '%</span>' +
+      '</div>'
+    );
     wrap.appendChild(header);
     const grid = document.createElement('div'); grid.className = 'mosaic-grid';
     sheet.grid.forEach((slot, cellIdx) => {
@@ -1187,6 +1197,20 @@
       }
     }
     updateClassTilesCounter(cmSnap);
+  }
+
+  // Aggregate class progress: % of (16 sections * 18 slots = 288) total slots solved.
+  // A "released" section counts as 18/18.
+  function computeClassProgress(cmSnap) {
+    cmSnap = cmSnap || state.classMosaic || { solved: {}, released: {} };
+    let solved = 0;
+    const total = 16 * 18;
+    Object.keys(state.sheets.sheets).forEach(sid => {
+      if (cmSnap.released && cmSnap.released[sid]) { solved += 18; return; }
+      const bm = (cmSnap.solved && cmSnap.solved[sid]) || [];
+      solved += bm.filter(Boolean).length;
+    });
+    return { percent: Math.round((solved / total) * 100), solved, total };
   }
 
   function updateClassTilesCounter(cmSnap) {
