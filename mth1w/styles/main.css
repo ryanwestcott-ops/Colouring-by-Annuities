@@ -505,6 +505,190 @@ body { font-size: 15.5px; }
 }
 
 /* =========================================================================
+   MTH1W-specific additions (palette refresh + topic-aware show-your-work +
+   mosaic toggle + fullscreen + tile flip animations)
+   ========================================================================= */
+
+/* ── Palette refresh: cool gray background, pure white cards ─────────── */
+body {
+  background: #F5F5F7;
+  background-image: none;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1d1d1f;
+}
+.card {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px -8px rgba(0,0,0,0.08);
+}
+.q-card {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 6px 18px -8px rgba(0,0,0,0.08);
+  padding: 20px 22px;
+}
+.q-card:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 10px 24px -8px rgba(0,0,0,0.12); }
+.q-card.correct {
+  background: linear-gradient(180deg, #E8F5EC 0%, #FFFFFF 60%);
+  box-shadow: 0 1px 2px rgba(30,122,60,0.06), 0 8px 22px -10px rgba(30,122,60,0.18);
+}
+
+/* ── Question header tweaks ──────────────────────────────────────────── */
+.q-number {
+  background: #E5E5EA !important;
+  color: #1d1d1f !important;
+  font-weight: 700;
+  text-shadow: none;
+  width: 36px; height: 36px; font-size: 15px;
+  box-shadow: none;
+}
+.q-card.correct .q-number { background: var(--accent-soft) !important; color: var(--accent-dark) !important; }
+.q-text { color: #1d1d1f; font-size: 15.5px; line-height: 1.55; }
+
+/* ── Meta row: chip + hints in one strip near the top ───────────────── */
+.q-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin: 10px 0 0; flex-wrap: wrap;
+}
+.q-meta .lesson-chip {
+  background: rgba(43,111,178,0.10); color: var(--info);
+  font-weight: 700; letter-spacing: 0.05em;
+  padding: 3px 9px; border-radius: 999px; font-size: 11px;
+}
+.q-meta .hint-trigger { margin: 0; }
+.q-meta .hint-trigger > span { display: none; }   /* the "Stuck?" label is implied here */
+.q-meta .hint-btn {
+  font-size: 11.5px; padding: 3px 10px; border-radius: 999px;
+  background: rgba(200,158,96,0.10); color: #6b4d12;
+  border: 1px solid rgba(200,158,96,0.4);
+}
+.q-meta .hint-btn:hover:not(:disabled) { background: var(--gold-soft); }
+.q-meta .hint-btn:disabled { background: #f2f2f4; color: #aaa; border-color: #e5e5ea; }
+
+/* ── Pretty formula KaTeX colours ────────────────────────────────────── */
+.work-formula { background: #F5F5F7; border-left-color: #1d1d1f; }
+.work-formula .katex { font-size: 1.05em; color: #1d1d1f; }
+.q-text .katex, .hint-card .katex { font-size: 1em; }
+
+/* ── Submit button states: checking / correct / shake ────────────────── */
+.answer-row button.primary { transition: background 0.2s, transform 0.1s, box-shadow 0.2s; }
+.answer-row button.primary.is-checking {
+  background: #8E8E93; border-color: #8E8E93; cursor: progress;
+}
+.answer-row button.primary.is-correct {
+  background: #34C759; border-color: #34C759;
+  box-shadow: 0 0 0 4px rgba(52,199,89,0.15), 0 6px 18px rgba(52,199,89,0.3);
+  animation: btn-pop 0.4s ease;
+}
+@keyframes btn-pop { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.answer-row button.primary.is-shake { animation: shake 0.4s ease; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* ── Mosaic card: toggle + fullscreen button ─────────────────────────── */
+.mosaic-card { padding: 14px !important; border-radius: 16px; }
+.mosaic-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; gap: 8px;
+}
+.mosaic-toggle {
+  display: inline-flex; background: #F2F2F4; padding: 3px; border-radius: 10px;
+}
+.mosaic-tab {
+  font-size: 12px; padding: 5px 12px; border-radius: 8px;
+  border: none; background: transparent; color: var(--ink-soft);
+  font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.mosaic-tab.active { background: white; color: #1d1d1f; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+.mosaic-tab:hover:not(.active) { color: #1d1d1f; }
+.mosaic-fullscreen {
+  background: transparent; border: 1px solid #E5E5EA; padding: 3px 9px; border-radius: 8px;
+  font-size: 16px; color: var(--ink-soft); cursor: pointer; transition: all 0.15s;
+}
+.mosaic-fullscreen:hover { background: #1d1d1f; color: white; border-color: #1d1d1f; }
+
+/* ── My-tile view: single 10x10 grid with flippable tiles ────────────── */
+.stage-mine { padding: 4px 0; }
+.my-tile-wrap { display: flex; flex-direction: column; gap: 10px; }
+.my-tile-header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 12.5px; color: var(--ink-soft);
+}
+.my-tile-label strong { font-family: "Iowan Old Style", Georgia, serif; color: #1d1d1f; font-size: 16px; }
+.my-tile-progress { background: #F2F2F4; padding: 3px 10px; border-radius: 999px; font-weight: 600; }
+.mosaic-grid {
+  display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px;
+  background: #E5E5EA; padding: 3px; border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+  aspect-ratio: 1;
+}
+
+/* ── Mosaic tile 3D flip ─────────────────────────────────────────────── */
+.mosaic-tile {
+  perspective: 600px;
+  aspect-ratio: 1;
+}
+.tile-inner {
+  position: relative; width: 100%; height: 100%;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.tile-front, .tile-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 2px;
+}
+.tile-front { background: #FAFAFA; }
+.tile-back  { transform: rotateY(180deg); }
+.mosaic-tile.is-revealed .tile-inner { transform: rotateY(180deg); }
+.mosaic-tile.no-animate .tile-inner { transition: none; }
+
+/* ── Class-mosaic view: 4x4 of mini grids ────────────────────────────── */
+.stage-class .class-mosaic-wrap { background: #E5E5EA; }
+.cm-section.mine { outline-color: #FF9F0A; box-shadow: 0 0 0 2px rgba(255,159,10,0.3), 0 6px 14px rgba(255,159,10,0.3); }
+
+/* ── Fullscreen overlay ──────────────────────────────────────────────── */
+.mosaic-fullscreen-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20, 20, 24, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px; animation: fs-fade 0.25s ease;
+}
+@keyframes fs-fade { from { opacity: 0; } to { opacity: 1; } }
+.fullscreen-close {
+  position: absolute; top: 18px; right: 24px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: white; width: 44px; height: 44px; border-radius: 50%;
+  font-size: 22px; cursor: pointer;
+}
+.fullscreen-close:hover { background: rgba(255,255,255,0.18); }
+.fullscreen-tabs {
+  display: flex; gap: 4px; background: rgba(255,255,255,0.1); padding: 4px;
+  border-radius: 12px; margin-bottom: 24px;
+}
+.fs-tab {
+  font: inherit; border: none; background: transparent;
+  color: rgba(255,255,255,0.7); padding: 8px 18px; border-radius: 8px;
+  font-weight: 600; cursor: pointer; font-size: 14px;
+}
+.fs-tab.active { background: rgba(255,255,255,0.95); color: #1d1d1f; }
+.fullscreen-stage { max-width: 88vh; width: min(88vh, 92vw); }
+.fullscreen-stage .mosaic-grid {
+  background: rgba(255,255,255,0.05); padding: 6px; border-radius: 14px;
+}
+.fullscreen-stage .tile-front { background: rgba(255,255,255,0.06); }
+.fullscreen-stage .my-tile-header { color: rgba(255,255,255,0.9); }
+.fullscreen-stage .my-tile-label strong, .fullscreen-stage .my-tile-progress { color: white; background: rgba(255,255,255,0.15); }
+.fullscreen-stage .class-mosaic-wrap { background: rgba(255,255,255,0.05); padding: 6px; border-radius: 14px; }
+.fullscreen-stage .cm-section { background: rgba(255,255,255,0.05); }
+.fullscreen-stage .cm-label { color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.3); }
+
+/* =========================================================================
    MTH1W-specific additions: lesson chip, show-your-work, class mosaic
    ========================================================================= */
 .lesson-chip {

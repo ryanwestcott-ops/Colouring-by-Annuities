@@ -14,9 +14,48 @@
   function escapeHtml(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   }
-  // Render question text: escape HTML first, then render **bold** as <strong>.
+  // Render question text: escape HTML, then render **bold** + $math$ via KaTeX.
   function renderQuestionText(s) {
-    return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    return renderMath(escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'));
+  }
+  // Replace any $...$ in an HTML string with rendered KaTeX. Falls back to raw if not loaded.
+  function renderMath(html) {
+    if (typeof window.katex === 'undefined') return html;
+    return html.replace(/\$([^$<>]+?)\$/g, function (m, expr) {
+      try {
+        const decoded = expr.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+        return window.katex.renderToString(decoded, { throwOnError: false, output: 'html' });
+      } catch (_) { return m; }
+    });
+  }
+  // Render-after-insert: walk an element's text nodes and convert $...$ to KaTeX.
+  function renderMathInElement(el) {
+    if (!el || typeof window.katex === 'undefined') return;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    const targets = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      if (n.nodeValue && n.nodeValue.indexOf('$') >= 0 && n.parentNode && !n.parentNode.closest('.katex')) {
+        targets.push(n);
+      }
+    }
+    targets.forEach(function (textNode) {
+      const txt = textNode.nodeValue;
+      if (!/\$[^$]+\$/.test(txt)) return;
+      const frag = document.createDocumentFragment();
+      let lastEnd = 0;
+      txt.replace(/\$([^$]+)\$/g, function (m, expr, off) {
+        if (off > lastEnd) frag.appendChild(document.createTextNode(txt.slice(lastEnd, off)));
+        const span = document.createElement('span');
+        try { window.katex.render(expr, span, { throwOnError: false, output: 'html' }); }
+        catch (_) { span.textContent = m; }
+        frag.appendChild(span);
+        lastEnd = off + m.length;
+        return m;
+      });
+      if (lastEnd < txt.length) frag.appendChild(document.createTextNode(txt.slice(lastEnd)));
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
   }
   // Parse a user-typed dollar amount: accept $, commas, whitespace.
   function parseMoney(s) {
@@ -373,23 +412,24 @@
         '</div>' +
       '</div>';
     if (!isCorrect) {
-      // Lesson tag chip
+      // Lesson tag chip + hint pills moved to the TOP of the card (under the question text)
       const tagLabel = (q.curriculumTag || '').replace('MTH1W.', '');
       html +=
-        '<div style="margin:6px 0 0;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">' +
+        '<div class="q-meta">' +
           '<span class="lesson-chip">' + escapeHtml(tagLabel) + '</span>' +
-          '<span style="font-size:12px;color:var(--ink-soft);">Show your work, then submit your answer.</span>' +
+          '<div class="hint-trigger" id="hints-' + idx + '"></div>' +
         '</div>' +
+        '<div id="hint-card-' + idx + '"></div>' +
         renderShowYourWorkHTML(q, idx) +
         '<div class="answer-row">' +
           '<div class="dollar-input"><input type="number" step="0.01" inputmode="decimal" id="ans-' + idx + '" placeholder="My answer"></div>' +
           '<button class="primary" id="submit-' + idx + '">Submit answer</button>' +
         '</div>' +
-        '<div id="feedback-' + idx + '">' + fbHtml + '</div>' +
-        '<div class="hint-trigger" id="hints-' + idx + '"></div>' +
-        '<div id="hint-card-' + idx + '"></div>';
+        '<div id="feedback-' + idx + '">' + fbHtml + '</div>';
     }
     setHTML(card, html);
+    // Render any KaTeX math left over in the formula areas, hints, intros
+    renderMathInElement(card);
     if (!isCorrect) {
       card.querySelector('#submit-' + idx).onclick = () => submitAnswer(q, idx);
       card.querySelector('#ans-' + idx).addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(q, idx); });
@@ -404,28 +444,28 @@
     const p = q.params || {};
     switch (q.type) {
       case 'simple_interest_find_I':
-        return { formula: 'I = P × r × t', intro: 'Find each known value, write the rate as a decimal, then multiply.',
+        return { formula: '$I = P \\cdot r \\cdot t$', intro: 'Find each known value, write the rate as a decimal, then multiply.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r', label: 'r (rate as decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'simple_interest_find_P':
-        return { formula: 'P = I ÷ (r × t)', intro: 'Rearrange I = P × r × t to solve for P.',
+        return { formula: '$P = \\dfrac{I}{r \\cdot t}$', intro: 'Rearrange I = P × r × t to solve for P.',
           fields: [
             { key: 'I', label: 'I (interest earned, $)', expected: p.I },
             { key: 'r', label: 'r (decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'compound_annual':
-        return { formula: 'A = P(1 + r)^t', intro: 'Identify P, r (as a decimal), and t.',
+        return { formula: '$A = P(1 + r)^{t}$', intro: 'Identify P, r (as a decimal), and t.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r', label: 'r (decimal)', expected: p.r/100, hint: 'Divide the % by 100' },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'compound_periodic':
-        return { formula: 'A = P(1 + r/n)^(n·t)', intro: 'r is the ANNUAL rate. n = times per year it compounds.',
+        return { formula: '$A = P\\left(1 + \\dfrac{r}{n}\\right)^{n \\cdot t}$', intro: 'r is the ANNUAL rate. n = times per year it compounds.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r', label: 'r (annual decimal)', expected: p.r/100 },
@@ -433,33 +473,33 @@
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'appreciation_exp':
-        return { formula: 'V = V₀(1 + r)^t', intro: 'Appreciation grows: use (1 + r).',
+        return { formula: '$V = V_{0}(1 + r)^{t}$', intro: 'Appreciation grows: use (1 + r).',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'r', label: 'r (decimal)', expected: p.r/100 },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'depreciation_exp':
-        return { formula: 'V = V₀(1 − r)^t', intro: 'Depreciation shrinks: use (1 − r).',
+        return { formula: '$V = V_{0}(1 - r)^{t}$', intro: 'Depreciation shrinks: use (1 − r).',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'r', label: 'r (decimal)', expected: p.r/100 },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'budgeting_savings':
-        return { formula: 'Savings = Income − Total expenses',
+        return { formula: '$\\text{Savings} = \\text{Income} - \\text{Expenses}$',
           fields: [
             { key: 'income', label: 'Income ($/month)', expected: p.income },
             { key: 'expenses', label: 'Total expenses ($)', expected: p.expenses, hint: 'Add up every expense first' }
           ] };
       case 'budgeting_percent':
-        return { formula: '% = (Amount ÷ Income) × 100',
+        return { formula: '$\\% = \\dfrac{\\text{Amount}}{\\text{Income}} \\times 100$',
           fields: [
             { key: 'amount', label: 'Amount on category ($)', expected: p.amount },
             { key: 'income', label: 'Total income ($)', expected: p.income }
           ] };
       case 'loan_payment':
-        return { formula: 'A = P · r(1+r)^n / [(1+r)^n − 1]', intro: 'r is the MONTHLY rate, n is total months.',
+        return { formula: '$A = P \\cdot \\dfrac{r(1+r)^{n}}{(1+r)^{n} - 1}$', intro: 'r is the MONTHLY rate, n is total months.',
           fields: [
             { key: 'P', label: 'P (principal, $)', expected: p.P },
             { key: 'r_monthly', label: 'r (monthly decimal)', expected: p.r_annual/100/12, hint: 'Annual % ÷ 100 ÷ 12' },
@@ -468,7 +508,7 @@
       case 'dm_mean': {
         const data = p.data || [];
         const sum = data.reduce(function(a,b){return a+b;}, 0);
-        return { formula: 'Mean = Sum ÷ Count',
+        return { formula: '$\\text{Mean} = \\dfrac{\\text{Sum}}{\\text{Count}}$',
           fields: [
             { key: 'sum', label: 'Sum of all values', expected: sum, hint: 'Add up every value' },
             { key: 'count', label: 'Count (how many values)', expected: data.length }
@@ -496,59 +536,59 @@
       }
       case 'dm_range': {
         const data = p.data || [];
-        return { formula: 'Range = Max − Min',
+        return { formula: '$\\text{Range} = \\text{Max} - \\text{Min}$',
           fields: [
             { key: 'max', label: 'Max (largest value)', expected: Math.max.apply(null, data) },
             { key: 'min', label: 'Min (smallest value)', expected: Math.min.apply(null, data) }
           ] };
       }
       case 'dm_iqr':
-        return { formula: 'IQR = Q3 − Q1', intro: 'Q1 = median of the lower half. Q3 = median of the upper half.',
+        return { formula: '$\\text{IQR} = Q_3 - Q_1$', intro: 'Q1 = median of the lower half. Q3 = median of the upper half.',
           fields: [
             { key: 'q1', label: 'Q1 (lower-half median)', expected: p.q1 },
             { key: 'q3', label: 'Q3 (upper-half median)', expected: p.q3 }
           ] };
       case 'dm_prediction':
-        return { formula: 'y = m·x + b', intro: 'Substitute the given x into the line equation.',
+        return { formula: '$y = m \\cdot x + b$', intro: 'Substitute the given x into the line equation.',
           fields: [
             { key: 'm', label: 'm (slope)', expected: p.m },
             { key: 'x', label: 'x (value to predict at)', expected: p.x },
             { key: 'b', label: 'b (y-intercept)', expected: p.b }
           ] };
       case 'fl_discount':
-        return { formula: 'Sale = Original × (1 − pct/100)',
+        return { formula: '$\\text{Sale} = \\text{Original} \\times (1 - \\tfrac{\\text{pct}}{100})$',
           fields: [
             { key: 'original', label: 'Original price ($)', expected: p.original },
             { key: 'pct', label: 'Discount %', expected: p.pct }
           ] };
       case 'fl_tax_total':
-        return { formula: 'Total = Subtotal × (1 + rate/100)',
+        return { formula: '$\\text{Total} = \\text{Subtotal} \\times (1 + \\tfrac{\\text{rate}}{100})$',
           fields: [
             { key: 'subtotal', label: 'Subtotal ($)', expected: p.subtotal },
             { key: 'rate', label: 'Tax rate %', expected: p.rate }
           ] };
       case 'fl_tip_total':
-        return { formula: 'Total = Subtotal × (1 + pct/100)',
+        return { formula: '$\\text{Total} = \\text{Subtotal} \\times (1 + \\tfrac{\\text{pct}}{100})$',
           fields: [
             { key: 'subtotal', label: 'Bill ($)', expected: p.subtotal },
             { key: 'pct', label: 'Tip %', expected: p.pct }
           ] };
       case 'fl_linear_appreciation':
-        return { formula: 'V = V₀ + d · t', intro: 'Linear growth — add a fixed dollar amount each year.',
+        return { formula: '$V = V_{0} + d \\cdot t$', intro: 'Linear growth — add a fixed dollar amount each year.',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'd', label: 'd (increase per year, $)', expected: p.d },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'fl_linear_depreciation':
-        return { formula: 'V = V₀ − d · t', intro: 'Linear shrinkage — subtract a fixed dollar amount each year.',
+        return { formula: '$V = V_{0} - d \\cdot t$', intro: 'Linear shrinkage — subtract a fixed dollar amount each year.',
           fields: [
             { key: 'V0', label: 'V₀ (starting value, $)', expected: p.V0 },
             { key: 'd', label: 'd (decrease per year, $)', expected: p.d },
             { key: 't', label: 't (years)', expected: p.t }
           ] };
       case 'fl_compare_options':
-        return { formula: 'Difference = Option B total − Option A total', intro: 'Find each total cost first, then subtract.',
+        return { formula: '$\\text{Diff} = B_{\\text{total}} - A_{\\text{total}}$', intro: 'Find each total cost first, then subtract.',
           fields: [
             { key: 'A_total', label: 'Option A total ($)', expected: p.cash_price, hint: 'Cash price upfront' },
             { key: 'B_total', label: 'Option B total ($)', expected: p.total_b, hint: 'Monthly × months' }
@@ -562,7 +602,7 @@
           ] };
       }
       case 'dm_scatter_from_points':
-        return { formula: 'm = Δy/Δx, then b = y₁ − m·x₁, then y = m·x + b', intro: 'Use the two points on the line to find slope and intercept, then predict.',
+        return { formula: '$m = \\dfrac{\\Delta y}{\\Delta x},\\;\\; b = y_1 - m x_1,\\;\\; y = mx + b$', intro: 'Use the two points on the line to find slope and intercept, then predict.',
           fields: [
             { key: 'm', label: 'm (slope)', expected: p.m },
             { key: 'b', label: 'b (y-intercept)', expected: p.b },
@@ -600,7 +640,8 @@
       return html;
     }
     if (tpl.formula) {
-      html += '<div class="work-formula"><strong>Formula:</strong> <code>' + escapeHtml(tpl.formula) + '</code></div>';
+      // Formulas are controlled strings from workTemplateFor — render math without HTML escape.
+      html += '<div class="work-formula"><strong>Formula:</strong> ' + renderMath(tpl.formula) + '</div>';
     }
     if (tpl.intro) {
       html += '<p class="work-intro">' + escapeHtml(tpl.intro) + '</p>';
@@ -852,38 +893,77 @@
     if (!isFinite(val)) { toast('Enter a number first. ($, commas OK)', 'warn'); return; }
     const fbEl = document.getElementById('feedback-' + idx);
     const statusEl = document.getElementById('qstatus-' + idx);
+    const submitBtn = document.getElementById('submit-' + idx);
+    const submitBtnRect = submitBtn ? submitBtn.getBoundingClientRect() : null;
     state.lastFeedback = state.lastFeedback || {};
     if (fbEl) setHTML(fbEl, '');
-    // Always submit "work" alongside the answer (assessment evidence).
+    // Instant snappy feedback: button transitions immediately
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.dataset.origText = submitBtn.textContent;
+      submitBtn.textContent = 'Checking…';
+      submitBtn.classList.add('is-checking');
+    }
     try { await API.submitTVMSetup(state.student.number, idx, readSetup(idx)); } catch (_) {}
     inp.disabled = true;
-    state.interacting = Date.now();  // Suppress poll re-render while we're mid-submit
+    state.interacting = Date.now();
     try {
       const r = await API.submitAnswer(state.student.number, idx, val);
       if (!r.ok) {
         state.lastFeedback[idx] = { text: r.error || 'Submit failed', warn: true };
         if (fbEl) setHTML(fbEl, '<div class="feedback warn">' + escapeHtml(r.error || 'Submit failed') + '</div>');
-        inp.disabled = false; return;
+        inp.disabled = false;
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset.origText || 'Submit answer'; submitBtn.classList.remove('is-checking'); }
+        return;
       }
       if (r.correct) {
         state.student.answers[idx] = { value: val, correct: true, attempts: r.attemptNumber, completedAt: Date.now() };
         (r.gridCells || []).forEach(c => state.justFilled.add(c));
         delete state.lastFeedback[idx];
-        toast('Correct! +' + (r.gridCells || []).length + ' tiles');
-        render();
+        if (submitBtn) {
+          submitBtn.textContent = '✓ Correct!';
+          submitBtn.classList.remove('is-checking');
+          submitBtn.classList.add('is-correct');
+        }
+        // Confetti burst from the submit button
+        fireConfettiAt(submitBtnRect);
+        // Tile flips happen 200ms later as eye travels (re-render schedules animation)
+        setTimeout(() => render(), 250);
       } else {
-        const fbText = r.feedback || "Re-check your setup. Try Hint 1 if you're stuck.";
+        const fbText = r.feedback || "Re-check your setup. Try the Small hint if you're stuck.";
         const fullText = fbText + ' (attempt ' + r.attemptNumber + ')';
         state.lastFeedback[idx] = { text: fullText, warn: !r.isClose };
         if (fbEl) setHTML(fbEl, '<div class="feedback ' + (r.isClose ? '' : 'warn') + '">' + escapeHtml(fullText) + '</div>');
-        if (statusEl) { statusEl.className = 'q-status wrong'; statusEl.textContent = 'Recheck -- try again'; }
+        if (statusEl) { statusEl.className = 'q-status wrong'; statusEl.textContent = 'Recheck — try again'; }
         inp.disabled = false; inp.select && inp.select();
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = submitBtn.dataset.origText || 'Submit answer';
+          submitBtn.classList.remove('is-checking');
+          // Brief shake to draw the eye to the feedback
+          submitBtn.classList.add('is-shake');
+          setTimeout(() => submitBtn.classList.remove('is-shake'), 500);
+        }
       }
     } catch (err) {
       state.lastFeedback[idx] = { text: 'Could not reach server. Your answer was saved locally and will sync.', warn: true };
       if (fbEl) setHTML(fbEl, '<div class="feedback warn">Could not reach server. Your answer was saved locally and will sync.</div>');
       inp.disabled = false;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset.origText || 'Submit answer'; submitBtn.classList.remove('is-checking'); }
     }
+  }
+
+  function fireConfettiAt(rect) {
+    if (typeof window.confetti !== 'function' || !rect) return;
+    const origin = {
+      x: (rect.left + rect.width / 2) / window.innerWidth,
+      y: (rect.top + rect.height / 2) / window.innerHeight
+    };
+    window.confetti({
+      particleCount: 60, spread: 65, startVelocity: 35, ticks: 130,
+      origin: origin, scalar: 0.9,
+      colors: ['#1e7a3c', '#c89e60', '#5bc0eb', '#a8d65c', '#f4d03f', '#7d4f2a']
+    });
   }
 
   function renderHintButtons(idx, scope) {
@@ -911,6 +991,7 @@
     const hintCardEl = root.querySelector('#hint-card-' + idx);
     if (current && current.html && hintCardEl) {
       setHTML(hintCardEl, '<div class="hint-card"><h5>Hint level ' + current.level + '</h5>' + current.html + '</div>');
+      renderMathInElement(hintCardEl);
     }
   }
 
@@ -929,34 +1010,139 @@
   // section, plus teacher-released sections).
   function renderMosaic(sheet, colors, slots) {
     const card = document.createElement('div');
-    card.className = 'card class-mosaic-card';
+    card.className = 'card mosaic-card';
     const mySection = state.student.sheetId;
+    const mode = state.mosaicMode || (localStorage.getItem('mosaic.mth1w.mosaicMode.v1') || 'mine');
+    state.mosaicMode = mode;
     setHTML(card,
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
-        '<h3 style="margin:0;">Class mosaic</h3>' +
-        '<span style="font-size:12px;color:var(--accent-dark);background:var(--gold-soft);padding:2px 8px;border-radius:6px;font-weight:600;">Your tile: ' + escapeHtml(mySection) + '</span>' +
+      '<div class="mosaic-header">' +
+        '<div class="mosaic-toggle" role="tablist">' +
+          '<button class="mosaic-tab ' + (mode === 'mine'  ? 'active' : '') + '" data-mode="mine">My tile</button>' +
+          '<button class="mosaic-tab ' + (mode === 'class' ? 'active' : '') + '" data-mode="class">Class</button>' +
+        '</div>' +
+        '<button class="mosaic-fullscreen" id="mosaic-fs" title="Fullscreen">⛶</button>' +
       '</div>' +
-      '<p style="margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.45;">' +
-        'Complete questions to help build the class mosaic. Your tile fills as you answer correctly. The full picture appears when every tile is done.' +
-      '</p>'
+      '<div class="mosaic-stage" id="mosaic-stage"></div>' +
+      '<div class="mosaic-legend-wrap" id="mosaic-legend"></div>'
     );
-    // Container for the 40x40 super-grid composed of 16 section grids
-    const wrap = document.createElement('div');
-    wrap.className = 'class-mosaic-wrap';
-    wrap.id = 'class-mosaic';
-    card.appendChild(wrap);
-    drawClassMosaic(wrap, sheet, colors, slots);
+    drawMosaicStage(card.querySelector('#mosaic-stage'), mode);
     // Legend
-    const legend = document.createElement('div'); legend.className = 'legend';
+    const legend = card.querySelector('#mosaic-legend');
+    const legendInner = document.createElement('div'); legendInner.className = 'legend';
     Object.keys(colors).forEach(key => {
       const c = colors[key];
       const item = document.createElement('div'); item.className = 'item';
       const sw = document.createElement('span'); sw.className = 'swatch'; sw.style.background = c.hex;
       const lbl = document.createElement('span'); lbl.textContent = c.label;
-      item.appendChild(sw); item.appendChild(lbl); legend.appendChild(item);
+      item.appendChild(sw); item.appendChild(lbl); legendInner.appendChild(item);
     });
-    card.appendChild(legend);
+    legend.appendChild(legendInner);
+    // Tab handlers
+    card.querySelectorAll('.mosaic-tab').forEach(btn => {
+      btn.onclick = () => {
+        const m = btn.getAttribute('data-mode');
+        state.mosaicMode = m;
+        localStorage.setItem('mosaic.mth1w.mosaicMode.v1', m);
+        card.querySelectorAll('.mosaic-tab').forEach(b => b.classList.toggle('active', b === btn));
+        drawMosaicStage(card.querySelector('#mosaic-stage'), m);
+      };
+    });
+    card.querySelector('#mosaic-fs').onclick = () => openFullscreenMosaic();
     return card;
+  }
+
+  function drawMosaicStage(stage, mode) {
+    setHTML(stage, '');
+    const colors = state.sheets.colors;
+    const slots = state.sheets.questionColorSlots;
+    if (mode === 'mine') {
+      stage.className = 'mosaic-stage stage-mine';
+      drawMyTile(stage, colors, slots);
+    } else {
+      stage.className = 'mosaic-stage stage-class';
+      const wrap = document.createElement('div');
+      wrap.className = 'class-mosaic-wrap';
+      wrap.id = 'class-mosaic';
+      stage.appendChild(wrap);
+      drawClassMosaic(wrap, null, colors, slots);
+    }
+  }
+
+  // Single 10x10 grid of student's own section. Animates flipping new tiles in.
+  function drawMyTile(stage, colors, slots) {
+    const sid = state.student.sheetId;
+    const sheet = state.sheets.sheets[sid];
+    const cmSnap = state.classMosaic || { solved: {}, released: {} };
+    const sectionSolved = (cmSnap.solved && cmSnap.solved[sid]) || new Array(18).fill(false);
+    const released = !!(cmSnap.released && cmSnap.released[sid]);
+    let liveSolved = sectionSolved.slice();
+    state.student.answers.forEach((a, idx) => { if (a && a.correct) liveSolved[idx] = true; });
+
+    const wrap = document.createElement('div');
+    wrap.className = 'my-tile-wrap';
+    const header = document.createElement('div');
+    header.className = 'my-tile-header';
+    const solvedCount = liveSolved.filter(Boolean).length;
+    setHTML(header, '<span class="my-tile-label">Your section: <strong>' + escapeHtml(sid) + '</strong></span>' +
+                    '<span class="my-tile-progress">' + solvedCount + ' / 18 questions</span>');
+    wrap.appendChild(header);
+    const grid = document.createElement('div'); grid.className = 'mosaic-grid';
+    sheet.grid.forEach((slot, cellIdx) => {
+      const tile = document.createElement('div');
+      tile.className = 'mosaic-tile';
+      const inner = document.createElement('div'); inner.className = 'tile-inner';
+      const front = document.createElement('div'); front.className = 'tile-front';
+      const back  = document.createElement('div'); back.className  = 'tile-back';
+      if (slot !== null) back.style.background = colors[slots[slot]].hex;
+      inner.appendChild(front); inner.appendChild(back);
+      tile.appendChild(inner);
+      tile.setAttribute('data-cell', cellIdx);
+      tile.setAttribute('data-slot', String(slot));
+      if (slot !== null && (released || liveSolved[slot])) {
+        // Stagger the reveal: cells just-filled animate, already-filled jump
+        if (state.justFilled.has(cellIdx)) {
+          // Defer the class addition to next frame so the flip animates
+          requestAnimationFrame(() => requestAnimationFrame(() => tile.classList.add('is-revealed')));
+        } else {
+          tile.classList.add('is-revealed', 'no-animate');
+        }
+      }
+      grid.appendChild(tile);
+    });
+    state.justFilled.clear();
+    wrap.appendChild(grid);
+    stage.appendChild(wrap);
+  }
+
+  function openFullscreenMosaic() {
+    const ov = document.createElement('div');
+    ov.className = 'mosaic-fullscreen-overlay';
+    setHTML(ov,
+      '<button class="fullscreen-close" id="fs-close" aria-label="Close">×</button>' +
+      '<div class="fullscreen-tabs">' +
+        '<button class="fs-tab ' + (state.mosaicMode === 'mine' ? 'active' : '') + '" data-mode="mine">My tile</button>' +
+        '<button class="fs-tab ' + (state.mosaicMode === 'class' ? 'active' : '') + '" data-mode="class">Class</button>' +
+      '</div>' +
+      '<div class="fullscreen-stage" id="fs-stage"></div>'
+    );
+    document.body.appendChild(ov);
+    const stage = ov.querySelector('#fs-stage');
+    drawMosaicStage(stage, state.mosaicMode);
+    ov.querySelectorAll('.fs-tab').forEach(b => {
+      b.onclick = () => {
+        const m = b.getAttribute('data-mode');
+        state.mosaicMode = m;
+        localStorage.setItem('mosaic.mth1w.mosaicMode.v1', m);
+        ov.querySelectorAll('.fs-tab').forEach(x => x.classList.toggle('active', x === b));
+        drawMosaicStage(stage, m);
+      };
+    });
+    function close() { ov.remove(); }
+    ov.querySelector('#fs-close').onclick = close;
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    document.addEventListener('keydown', function onEsc(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onEsc); }
+    });
   }
 
   // Renders the 4x4 of 10x10 section grids into the given wrap element.
@@ -1020,9 +1206,10 @@
       const r = await API.classMosaic();
       if (r.ok) {
         state.classMosaic = r;
-        const wrap = document.getElementById('class-mosaic');
-        if (wrap) drawClassMosaic(wrap, null, state.sheets.colors, state.sheets.questionColorSlots);
-        else updateClassTilesCounter(r);
+        // Update whichever mosaic view is currently visible
+        const stage = document.getElementById('mosaic-stage');
+        if (stage) drawMosaicStage(stage, state.mosaicMode || 'mine');
+        updateClassTilesCounter(r);
       }
     } catch (_) {}
   }
