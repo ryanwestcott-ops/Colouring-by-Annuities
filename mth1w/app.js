@@ -198,6 +198,13 @@
   }
 
   function renderMission() {
+    // Guard against double-renders (init() + hashchange both call render(), and
+    // any later renderSection() pass could re-fire this). One overlay, ever.
+    if (document.querySelector('.mission-overlay')) return;
+    if (localStorage.getItem('mosaic.mth1w.missionSeen.v1') === '1') {
+      state.missionDismissed = true;
+      return;
+    }
     const ov = document.createElement('div');
     ov.className = 'mission-overlay';
     const budget = (state.config && state.config.hintBudget) || 5;
